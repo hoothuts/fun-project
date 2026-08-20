@@ -496,42 +496,179 @@ button {
 
 /* ── Track circuit ──────────────────────────────────────── */
 
-.circuit {
-  display: block;
-  width: min(460px, 100%);
-  margin: 2.25rem 0 0 auto;
+/* ── Track circuit & 3D Holographic Radar Dial ─────────── */
+
+.circuit-radar-container {
+  perspective: 1000px;
+  perspective-origin: center 55%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 1rem 0 2.5rem auto;
+  width: min(420px, 100%);
+}
+
+.circuit-radar-dial {
   position: relative;
+  width: min(380px, 92vw);
+  height: min(380px, 92vw);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #191012 0%, #120b0d 65%, #080506 100%);
+  border: 2px solid #33181c;
+  transform-style: preserve-3d;
+  transform: rotateX(42deg);
+  box-shadow:
+    0 25px 45px rgba(0, 0, 0, 0.95),
+    0 8px 25px rgba(225, 6, 0, 0.15),
+    0 0 0 5px rgba(24, 12, 14, 0.8),
+    0 0 0 7px #33181c,
+    inset 0 0 45px rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.circuit svg {
+.circuit-radar-dial:hover {
+  border-color: rgba(225, 6, 0, 0.6);
+  box-shadow:
+    0 30px 55px rgba(0, 0, 0, 0.95),
+    0 12px 30px rgba(225, 6, 0, 0.25),
+    0 0 0 5px rgba(24, 12, 14, 0.8),
+    0 0 0 7px var(--red),
+    inset 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.circuit-radar-dial.is-dragging {
+  cursor: grabbing;
+  border-color: var(--red);
+  transform: rotateX(38deg) scale(1.02);
+  box-shadow:
+    0 35px 65px rgba(0, 0, 0, 0.98),
+    0 15px 40px rgba(225, 6, 0, 0.4),
+    0 0 0 5px rgba(24, 12, 14, 0.8),
+    0 0 0 7px var(--red),
+    inset 0 0 60px rgba(0, 0, 0, 0.95);
+}
+
+.radar-bezel {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px dashed rgba(225, 6, 0, 0.25);
+  pointer-events: none;
+}
+
+.radar-ticks {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.radar-cardinal {
+  position: absolute;
+  font: 700 0.65rem/1 var(--font-mono);
+  color: rgba(225, 6, 0, 0.5);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.radar-cardinal.n { top: 16px; left: 50%; transform: translateX(-50%); color: var(--red); }
+.radar-cardinal.e { right: 16px; top: 50%; transform: translateY(-50%); }
+.radar-cardinal.s { bottom: 16px; left: 50%; transform: translateX(-50%); }
+.radar-cardinal.w { left: 16px; top: 50%; transform: translateY(-50%); }
+
+.radar-rotator {
+  position: absolute;
+  inset: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.05s linear;
+  will-change: transform;
+}
+
+.radar-rotator .track-svg {
   width: 100%;
-  height: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   display: block;
+  overflow: visible;
 }
 
-.circuit svg #track {
+.track-base {
   fill: none;
-  stroke: var(--red);
+  stroke: rgba(225, 6, 0, 0.22);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.circuit-img {
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  object-fit: contain;
+.track-active {
+  fill: none;
+  stroke: var(--red);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px var(--red)) drop-shadow(0 0 22px rgba(225, 6, 0, 0.7));
 }
 
 .car {
+  transform-box: fill-box;
+  transform-origin: center center;
+  will-change: transform;
+  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 14px var(--red));
+}
+
+.radar-hud {
   position: absolute;
-  width: 16px;
-  height: 8px;
-  left: -8px;
-  top: -4px;
-  background: var(--ink);
-  border-right: 3px solid var(--red);
-  border-radius: 2px;
-  box-shadow: 0 0 8px rgba(238, 240, 243, 0.7), 0 1px 3px rgba(0, 0, 0, 0.9);
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 5;
+  background: rgba(14, 8, 10, 0.9);
+  border: 1px solid rgba(225, 6, 0, 0.4);
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.radar-azimuth {
+  font: 700 0.65rem/1 var(--font-mono);
+  color: var(--red);
+  letter-spacing: 0.12em;
+}
+
+.radar-reset-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font: 700 0.62rem/1 var(--font-mono);
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  transition: color 0.15s ease;
+}
+
+.radar-reset-btn:hover {
+  color: #ffffff;
+}
+
+.radar-hint {
+  margin-top: 0.5rem;
+  font: 600 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  opacity: 0.75;
 }
 
 /* ── Circuit detail ─────────────────────────────────────── */
@@ -563,6 +700,21 @@ button {
   color: var(--red);
 }
 
+.clickable-row {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0.45rem 0.5rem;
+  transition: background 0.15s ease;
+}
+
+.clickable-row:hover {
+  background: var(--panel-2);
+}
+
+.clickable-row:hover .winner-name {
+  color: var(--red);
+}
+
 .race-log {
   display: grid;
   gap: 0.25rem;
@@ -573,7 +725,7 @@ button {
   grid-template-columns: 3.5rem 1.2fr auto auto;
   gap: 1rem;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--line);
   border-radius: 6px;
   font-size: 0.92rem;
@@ -602,11 +754,607 @@ button {
   text-align: right;
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
+.race-link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.race-link-btn:hover {
+  color: var(--red);
+}
+
+.race-link-btn.muted {
+  color: var(--muted);
+}
+
+.race-link-btn.muted:hover {
+  color: var(--ink);
+}
+
+/* ── Hero top & Season Picker ───────────────────────────── */
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-top .eyebrow {
+  margin: 0;
+}
+
+.season-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  max-width: 100%;
+}
+
+.season-pill {
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--muted);
+  font: 600 0.65rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.season-pill:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+.season-pill.active {
+  background: var(--panel-2);
+  border-color: var(--red);
+  color: var(--ink);
+}
+
+.loading-state {
+  font: 400 0.85rem/1 var(--font-mono);
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
+/* ── Driver Standings Grid ──────────────────────────────── */
+
+.driver-standings-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.3rem 1.4rem;
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.driver-standings-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+  box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.driver-badge-num {
+  font: 700 1.25rem/1 var(--font-mono);
+}
+
+.card-driver-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.driver-first-name {
+  font: 400 0.78rem/1 var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.team-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  margin-top: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--ink);
+  font: 500 0.65rem/1 var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: border-color 0.15s ease;
+}
+
+.team-tag:hover {
+  border-color: var(--accent);
+}
+
+.team-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* ── Driver cards in TeamDetail ─────────────────────────── */
+
+button.driver-card {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+button.driver-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--muted);
+}
+
+.driver-role-tag {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 3px;
+  font: 700 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.driver-role-tag.primary {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.driver-role-tag.secondary {
+  background: var(--panel-2);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.driver-role-tag.reserve {
+  background: var(--panel-2);
+  color: var(--muted);
+  border: 1px dashed var(--line);
+}
+
+.driver-card-go {
+  margin-left: auto;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+button.driver-card:hover .driver-card-go {
+  color: var(--red);
+}
+
+/* ── DriverDetail results ───────────────────────────────── */
+
+.race-team-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--muted);
+  font: 400 0.65rem/1 var(--font-mono);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.race-team-tag:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.race-pos-finish {
+  font: 700 0.85rem/1 var(--font-mono);
+}
+
+.race-points {
+  font: 400 0.75rem/1 var(--font-mono);
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ── Calendar / Schedule view ───────────────────────────── */
+
+.cal-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cal-card {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.2rem 1.4rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  transition: border-color 0.18s ease;
+}
+
+.cal-card:hover {
+  border-color: var(--panel-2);
+}
+
+.cal-round-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.5rem;
+  border-radius: 6px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+}
+
+.round-lbl {
+  font: 600 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.round-num {
+  font: 700 1.35rem/1.1 var(--font-mono);
+  color: var(--red);
+}
+
+.cal-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cal-header-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.cal-race-name {
+  margin: 0;
+  font: 400 1.15rem/1.1 var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cal-date {
+  font: 400 0.72rem/1 var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.cal-circuit-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 400 0.75rem/1 var(--font-mono);
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.cal-circuit-link:hover {
+  color: var(--ink);
+}
+
+.circuit-name {
+  color: var(--ink);
+}
+
+.circuit-loc {
+  color: var(--muted);
+}
+
+.circuit-go {
+  margin-left: 0.25rem;
+  font-size: 0.65rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+}
+
+.cal-result {
+  text-align: right;
+}
+
+.cal-winner-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.winner-tag {
+  font: 600 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.winner-driver-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 0.92rem/1 var(--font-body);
+  color: var(--ink);
+  transition: color 0.15s ease;
+}
+
+.winner-driver-btn:hover {
+  color: var(--red);
+}
+
+.winner-team-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--muted);
+  font: 400 0.65rem/1 var(--font-mono);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.winner-team-btn:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.upcoming-badge {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  font: 600 0.62rem/1 var(--font-mono);
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+/* ── Identity Backdrops & Telemetry Shaders ──────────────── */
+
+.detail {
+  position: relative;
+}
+
+.identity-backdrop {
+  position: absolute;
+  top: -1.5rem;
+  left: -2rem;
+  right: -2rem;
+  height: 380px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.identity-watermark {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  font: 900 clamp(5.5rem, 18vw, 16rem)/0.85 var(--font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--accent, #ffffff) 14%, transparent);
+  transform: rotate(-3deg);
+  user-select: none;
+  white-space: nowrap;
+  mask-image: linear-gradient(to bottom, black 40%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 95%);
+}
+
+.driver-number-watermark {
+  font-size: clamp(8rem, 26vw, 22rem);
+  top: -3rem;
+  right: 2rem;
+  transform: rotate(-2deg);
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--accent, #ffffff) 16%, transparent);
+}
+
+.driver-code-stamp {
+  position: absolute;
+  top: 1.8rem;
+  right: 3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: rgba(13, 15, 18, 0.7);
+  backdrop-filter: blur(8px);
+  color: color-mix(in srgb, var(--accent) 80%, #ffffff);
+  font: 700 0.85rem/1 var(--font-mono);
+  letter-spacing: 0.25em;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.aero-lines {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  opacity: 0.35;
+  transform: skewX(-25deg);
+}
+
+.aero-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 70%, transparent 100%);
+}
+
+.aero-line.line-1 {
+  width: 90%;
+  margin-left: auto;
+  opacity: 0.4;
+}
+
+.aero-line.line-2 {
+  width: 65%;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.aero-line.line-3 {
+  width: 80%;
+  margin-left: auto;
+  opacity: 0.3;
+}
+
+.telemetry-arc-wrap {
+  position: absolute;
+  top: 1.5rem;
+  right: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.75;
+}
+
+.telemetry-arc-svg {
+  width: 54px;
+  height: 54px;
+  transform: rotate(-90deg);
+}
+
+.arc-track {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 4;
+}
+
+.arc-pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--accent));
+}
+
+.telemetry-lbl {
+  font: 600 0.52rem/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.gps-coordinate-stamp {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font: 600 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(13, 15, 18, 0.6);
+}
+
+.sector-splits {
+  position: absolute;
+  top: 3.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.sector {
+  font: 700 0.6rem/1 var(--font-mono);
+  padding: 0.2rem 0.45rem;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+}
+
+.sector.s1 { color: #f5ff00; border-color: rgba(245, 255, 0, 0.3); }
+.sector.s2 { color: #0ad6ff; border-color: rgba(10, 214, 255, 0.3); }
+.sector.s3 { color: #ff0606; border-color: rgba(255, 6, 6, 0.3); }
+
+.identity-glow {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 500px;
+  height: 380px;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--accent, var(--red)) 18%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(40px);
+}
 
 @media (max-width: 720px) {
   .brand-name {
     display: none;
+  }
+
+  .tabs {
+    gap: 0.9rem;
+  }
+
+  .cal-card {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .cal-round-badge {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    width: fit-content;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .cal-result {
+    text-align: left;
+  }
+
+  .cal-winner-info {
+    align-items: flex-start;
   }
 
   .winners {
@@ -644,3 +1392,4 @@ button {
     display: none;
   }
 }
+

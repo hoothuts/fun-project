@@ -209,7 +209,7 @@
        id="clipPath7008"><path
          style="fill:none;stroke:#000000;stroke-opacity:1"
          d="M -335.20999,101.7943 H 938.29697 v 900.7185 H -335.20999 Z"
-         id="path7010" /></clipPath><clipPath
+          /></clipPath><clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath7012"><path
          style="fill:none;stroke:#000000;stroke-opacity:1"
@@ -1029,7 +1029,7 @@
          id="g4299"
          transform="matrix(0.17664717,0,0,0.17664717,1063.8296,-35.997523)"><path
            d="m 130.4401,-339.48245 c -32.397562,-34.36348 -5.99199,-63.16023 0.68952,-79.20519 11.15753,-26.79367 39.53931,-41.35221 60.08095,-40.23841 44.53839,2.41493 7.11093,149.50509 -25.58786,142.96104 -24.06456,-4.81607 -14.06757,-1.12111 -35.18261,-23.51744 z"
-           id="path4475"
+           
            sodipodi:nodetypes="sssss"
            style="display:inline;overflow:visible;visibility:visible;fill:#7b7bff;fill-opacity:0.211765;fill-rule:nonzero;stroke:#000096;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate" /></g><circle
          cx="1069.1957"

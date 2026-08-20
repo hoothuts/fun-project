@@ -96,7 +96,7 @@
       <path
          style="fill:#6a6a6a;fill-opacity:1;fill-rule:nonzero;stroke:#010101;stroke-width:11.50384331;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
          d="M 314.94434,290.89453 C 969.94356,290.89453 1624.9427,290.89453 2279.9419,290.89453 C 2279.9419,556.03306 2279.9419,821.17156 2279.9419,1086.3102 C 1624.9427,1086.3102 969.94356,1086.3102 314.94434,1086.3102 C 314.94434,821.17156 314.94434,556.03306 314.94434,290.89453 z"
-         id="path7702" />
+         id="track" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
@@ -365,10 +365,10 @@
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath7836">
-      <path
+      <path 
          style="fill:#6a6a6a;fill-opacity:1;fill-rule:nonzero;stroke:#010101;stroke-width:11.50384426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
          d="M 816.84373,900.94206 C 1296.3678,1347.1267 1775.8918,1793.3112 2255.4158,2239.4958 C 2436.0278,2045.3882 2616.6398,1851.2806 2797.2519,1657.173 C 2317.7278,1210.9884 1838.2039,764.80392 1358.6798,318.61932 C 1178.0677,512.72694 997.45575,706.83449 816.84373,900.94206 z"
-         id="path7838" />
+          />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"

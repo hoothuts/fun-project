@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { animate, scrambleText, stagger } from 'animejs';
+import { animate, stagger } from 'animejs';
 import { getStandings } from '../api.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
+
+const SEASONS = ['current', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014'];
 
 function StartingLights({ onOut }) {
   const ref = useRef(null);
@@ -20,7 +22,8 @@ function StartingLights({ onOut }) {
       { targets: lights, opacity: 0.12, duration: 500, delay: 1000 },
       { targets: el, opacity: 0, duration: 240 },
     ]);
-    setTimeout(onOut, 3000);
+    const timer = setTimeout(onOut, 2600);
+    return () => clearTimeout(timer);
   }, [onOut]);
   return (
     <div className="lights" ref={ref} aria-label="Starting lights">
@@ -31,23 +34,22 @@ function StartingLights({ onOut }) {
   );
 }
 
-export default function Grid({ onOpenTeam }) {
+export default function Grid({ onOpenTeam, initialSeason = 'current' }) {
+  const [season, setSeason] = useState(initialSeason);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [lightsOut, setLightsOut] = useState(false);
 
   useEffect(() => {
-    getStandings().then(setData).catch((e) => setError(e.message));
-  }, []);
+    setData(null);
+    setError(null);
+    setLightsOut(false);
+    getStandings(season)
+      .then(setData)
+      .catch((e) => setError(e.message));
+  }, [season]);
 
-  useEffect(() => {
-    if (!data || !lightsOut) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    animate('.card-pos', {
-      textContent: scrambleText({ chars: 'numbers', duration: 1000 }),
-      delay: stagger(150),
-    });
-  }, [data, lightsOut]);
+
 
   const gridRef = useAnime(
     {
@@ -65,11 +67,24 @@ export default function Grid({ onOpenTeam }) {
   return (
     <section className="grid-view">
       <header className="hero">
-        <p className="eyebrow">
-          {data ? `${data.season} SEASON · ROUND ${data.round}` : 'LOADING THE GRID…'}
-        </p>
+        <div className="hero-top">
+          <p className="eyebrow">
+            {data ? `${data.season} SEASON · ROUND ${data.round}` : 'LOADING THE GRID…'}
+          </p>
+          <div className="season-picker">
+            {SEASONS.map((s) => (
+              <button
+                key={s}
+                className={`season-pill ${season === s ? 'active' : ''}`}
+                onClick={() => setSeason(s)}
+              >
+                {s === 'current' ? 'CURRENT' : s}
+              </button>
+            ))}
+          </div>
+        </div>
         <BootTitle>THE GRID</BootTitle>
-        <p className="hero-sub">Tap a team to open its garage.</p>
+        <p className="hero-sub">Constructors Championship. Tap a team to open its garage.</p>
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}
@@ -84,7 +99,7 @@ export default function Grid({ onOpenTeam }) {
               key={t.Constructor.constructorId}
               className="team-card"
               style={{ '--accent': color }}
-              onClick={() => onOpenTeam(t)}
+              onClick={() => onOpenTeam(t.Constructor.constructorId, t)}
             >
               <span className="card-pos" style={{ color }}>
                 {String(i + 1).padStart(2, '0')}

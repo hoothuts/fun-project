@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { animate, scrambleText } from 'animejs';
 import { getCircuitHistory } from '../api.js';
 import { circuitMap } from '../circuitMaps.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import TrackCircuit from './TrackCircuit.jsx';
+import ScrambleNumber from './ScrambleNumber.jsx';
+import IdentityBackdrop from './IdentityBackdrop.jsx';
 
 const timeMs = (t) => {
   if (!t) return Infinity;
@@ -12,9 +13,9 @@ const timeMs = (t) => {
   return +m * 60000 + +s * 1000;
 };
 
-const top = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+const top = (m) => [...m.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, 3);
 
-export default function CircuitDetail({ circuit, onBack }) {
+export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTeam }) {
   const [history, setHistory] = useState(null);
   const [error, setError] = useState(null);
 
@@ -24,14 +25,6 @@ export default function CircuitDetail({ circuit, onBack }) {
       .then(setHistory)
       .catch((e) => setError(e.message));
   }, [circuit.circuitId]);
-
-  useEffect(() => {
-    if (!history || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    animate('.stat strong', {
-      textContent: scrambleText({ chars: 'numbers', duration: 900 }),
-      delay: 300,
-    });
-  }, [history]);
 
   const stats = useMemo(() => {
     if (!history) return null;
@@ -44,8 +37,10 @@ export default function CircuitDetail({ circuit, onBack }) {
         lapRecord = { ...r.fastest, year: r.season };
       }
       if (!r.winner) continue;
-      dwins.set(r.winner.name, (dwins.get(r.winner.name) || 0) + 1);
-      cwins.set(r.winner.constructor, (cwins.get(r.winner.constructor) || 0) + 1);
+      const dKey = r.winner.name;
+      const cKey = r.winner.constructor;
+      dwins.set(dKey, { count: (dwins.get(dKey)?.count || 0) + 1, id: r.winner.driverId });
+      cwins.set(cKey, { count: (cwins.get(cKey)?.count || 0) + 1, id: r.winner.constructorId });
     }
     return {
       first: Math.min(...years),
@@ -74,6 +69,13 @@ export default function CircuitDetail({ circuit, onBack }) {
 
   return (
     <section className="detail">
+      <IdentityBackdrop
+        type="circuit"
+        circuitId={circuit.circuitId}
+        lat={circuit.Location?.lat}
+        long={circuit.Location?.long}
+      />
+
       <button className="back" onClick={onBack}>
         ← THE TRACKS
       </button>
@@ -83,13 +85,13 @@ export default function CircuitDetail({ circuit, onBack }) {
         <BootTitle>{circuit.circuitName}</BootTitle>
         <p className="detail-meta">
           <span className="stat">
-            <strong>{stats?.first ?? '–'}</strong> FIRST GP
+            <ScrambleNumber value={stats?.first} delay={150} /> FIRST GP
           </span>
           <span className="stat">
-            <strong>{stats?.count ?? '–'}</strong> GPs
+            <ScrambleNumber value={stats?.count} delay={250} /> GPs
           </span>
           <span className="stat">
-            <strong>{stats?.last ?? '–'}</strong> LAST GP
+            <ScrambleNumber value={stats?.last} delay={350} /> LAST GP
           </span>
           <span className="stat">
             <strong>{stats?.lapRecord?.time ?? '–'}</strong> LAP RECORD
@@ -105,19 +107,27 @@ export default function CircuitDetail({ circuit, onBack }) {
       <div className="winners">
         <div className="winner-col">
           <h3 className="winner-label">DRIVERS</h3>
-          {stats?.drivers.map(([name, n]) => (
-            <div className="winner-row" key={name}>
+          {stats?.drivers.map(([name, obj]) => (
+            <div
+              className="winner-row clickable-row"
+              key={name}
+              onClick={() => obj.id && onOpenDriver && onOpenDriver(obj.id)}
+            >
               <span className="winner-name">{name}</span>
-              <span className="winner-count">{n}</span>
+              <span className="winner-count">{obj.count}</span>
             </div>
           ))}
         </div>
         <div className="winner-col">
           <h3 className="winner-label">CONSTRUCTORS</h3>
-          {stats?.teams.map(([name, n]) => (
-            <div className="winner-row" key={name}>
+          {stats?.teams.map(([name, obj]) => (
+            <div
+              className="winner-row clickable-row"
+              key={name}
+              onClick={() => obj.id && onOpenTeam && onOpenTeam(obj.id)}
+            >
               <span className="winner-name">{name}</span>
-              <span className="winner-count">{n}</span>
+              <span className="winner-count">{obj.count}</span>
             </div>
           ))}
         </div>
@@ -133,9 +143,29 @@ export default function CircuitDetail({ circuit, onBack }) {
             <div className="race-row" key={`${r.season}-${r.raceName}`}>
               <span className="race-year">{r.season}</span>
               <span className="race-name">{r.raceName}</span>
-              <span className="race-winner">{r.winner?.name ?? '—'}</span>
+              <span className="race-winner">
+                {r.winner ? (
+                  <button
+                    className="race-link-btn"
+                    onClick={() => r.winner.driverId && onOpenDriver && onOpenDriver(r.winner.driverId)}
+                  >
+                    {r.winner.name}
+                  </button>
+                ) : (
+                  '—'
+                )}
+              </span>
               <span className="race-fl">
-                {r.fastest ? `${r.fastest.name} ${r.fastest.time}` : '—'}
+                {r.fastest?.name ? (
+                  <button
+                    className="race-link-btn muted"
+                    onClick={() => r.fastest.driverId && onOpenDriver && onOpenDriver(r.fastest.driverId)}
+                  >
+                    {r.fastest.name} {r.fastest.time}
+                  </button>
+                ) : (
+                  '—'
+                )}
               </span>
             </div>
           ))}

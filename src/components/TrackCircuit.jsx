@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { animate, svg } from 'animejs';
 
 const D =
@@ -7,12 +7,13 @@ const D =
   'L 150 52 C 90 52 55 82 60 130 C 63 168 75 188 40 190 Z';
 
 const lapMs = (line) => {
-  const len = line.getTotalLength ? line.getTotalLength() : 0;
-  return Math.min(Math.max(Math.round(len / 0.12), 4000), 20000);
+  const len = line?.getTotalLength ? line.getTotalLength() : 0;
+  return Math.min(Math.max(Math.round(len / 0.18), 4000), 12000);
 };
 
 function trackBBox(d) {
   const toks = d.match(/[a-zA-Z]|[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/g);
+  if (!toks) return null;
   let i = 0;
   let x = 0;
   let y = 0;
@@ -98,12 +99,17 @@ function initState(file) {
 
 export default function TrackCircuit({ file }) {
   const ref = useRef(null);
+  const dialRef = useRef(null);
   const [state, setState] = useState(() => initState(file));
   const [track, setTrack] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ startAngle: 0, initialRotation: 0 });
 
   useEffect(() => {
     setState(initState(file));
     setTrack(null);
+    setRotation(0);
   }, [file]);
 
   useEffect(() => {
@@ -133,56 +139,195 @@ export default function TrackCircuit({ file }) {
     };
   }, [file]);
 
+  // Pointer drag rotation handler
+  const handlePointerDown = (e) => {
+    if (!dialRef.current) return;
+    const rect = dialRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+
+    dragStartRef.current = { startAngle, initialRotation: rotation };
+    setIsDragging(true);
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging || !dialRef.current) return;
+    const rect = dialRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+    const delta = currentAngle - dragStartRef.current.startAngle;
+    let newRot = Math.round((dragStartRef.current.initialRotation + delta) % 360);
+    if (newRot < 0) newRot += 360;
+    setRotation(newRot);
+  };
+
+  const handlePointerUp = (e) => {
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
+    }
+  };
+
+  const resetRotation = useCallback((e) => {
+    e.stopPropagation();
+    setRotation(0);
+  }, []);
+
   useEffect(() => {
     const host = ref.current;
     if (!host) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const trackEl = host.querySelector('#track');
+
+    const trackPath = host.querySelector('#track');
     const carEl = host.querySelector('.car');
-    if (!trackEl || !carEl) return;
-    const { translateX, translateY, rotate } = svg.createMotionPath(trackEl);
-    const anims = [
-      animate(svg.createDrawable(trackEl), {
-        draw: ['0 0', '0 1'],
-        duration: 1600,
-        ease: 'inOutCubic',
-      }),
-      animate(carEl, {
-        translateX,
-        translateY,
-        rotate,
-        duration: lapMs(trackEl),
-        ease: 'linear',
-        loop: true,
-      }),
-    ];
-    return () => anims.forEach((a) => a.revert());
+    if (!trackPath || !carEl) return;
+
+    const duration = lapMs(trackPath);
+
+    // 1. Line-drawing tracing animation on active neon layer:
+    const drawAnim = animate(svg.createDrawable(trackPath), {
+      draw: ['0 0', '0 1'],
+      ease: 'linear',
+      duration,
+      loop: true,
+    });
+
+    // 2. Motion path animation driving the car along the circuit:
+    const motion = svg.createMotionPath(trackPath);
+    const carAnim = motion
+      ? animate(carEl, {
+          ease: 'linear',
+          duration,
+          loop: true,
+          ...motion,
+        })
+      : null;
+
+    return () => {
+      drawAnim.revert();
+      if (carAnim) carAnim.revert();
+    };
   }, [state, track]);
 
   if (state === 'img') {
     return (
-      <img
-        className="circuit circuit-img"
-        src={`/circuit/${encodeURIComponent(file)}`}
-        alt=""
-        aria-hidden="true"
-      />
+      <div className="circuit" aria-hidden="true">
+        <img
+          className="circuit-img"
+          src={`/circuit/${encodeURIComponent(file)}`}
+          alt=""
+        />
+      </div>
     );
   }
 
   if (state === 'loading') return null;
 
-  const stroke = track ? Math.max(track.bb.w, track.bb.h) / 140 : 12;
+  const stroke = track ? Math.max(track.bb.w, track.bb.h) / 110 : 10;
+  const padding = stroke * 3.5;
   const viewBox = track
-    ? `${track.bb.x - stroke} ${track.bb.y - stroke} ${track.bb.w + stroke * 2} ${track.bb.h + stroke * 2}`
-    : '0 0 480 220';
+    ? `${track.bb.x - padding} ${track.bb.y - padding} ${track.bb.w + padding * 2} ${track.bb.h + padding * 2}`
+    : '-20 -20 520 260';
+
+  const carLen = stroke * 3.5;
+  const carWid = stroke * 1.8;
+  const pathData = track ? track.d : D;
 
   return (
-    <div className="circuit" ref={ref} aria-hidden="true">
-      <svg viewBox={viewBox}>
-        <path id="track" d={track ? track.d : D} strokeWidth={stroke} />
-      </svg>
-      <div className="car" />
+    <div className="circuit-radar-container" aria-hidden="true">
+      <div
+        className={`circuit-radar-dial ${isDragging ? 'is-dragging' : ''}`}
+        ref={dialRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
+        {/* Outer Telemetry Bezel Rings */}
+        <div className="radar-bezel" />
+        <div className="radar-ticks" />
+
+        {/* Compass Cardinal Points */}
+        <span className="radar-cardinal n">N</span>
+        <span className="radar-cardinal e">E</span>
+        <span className="radar-cardinal s">S</span>
+        <span className="radar-cardinal w">W</span>
+
+        {/* Rotating Track Stage */}
+        <div
+          className="radar-rotator"
+          ref={ref}
+          style={{ transform: `rotate(${rotation}deg)` }}
+        >
+          <svg viewBox={viewBox} className="track-svg">
+            <defs>
+              <pattern
+                id="radar-grid"
+                width="24"
+                height="24"
+                patternUnits="userSpaceOnUse"
+              >
+                <circle cx="12" cy="12" r="1" fill="rgba(225, 6, 0, 0.18)" />
+              </pattern>
+            </defs>
+
+            {/* Dot Matrix Background Grid */}
+            <rect
+              x={track ? track.bb.x - padding : -50}
+              y={track ? track.bb.y - padding : -50}
+              width={track ? track.bb.w + padding * 2 : 600}
+              height={track ? track.bb.h + padding * 2 : 350}
+              fill="url(#radar-grid)"
+            />
+
+            {/* Layer 1: Dimmed static track base outline */}
+            <path
+              className="track-base"
+              d={pathData}
+              strokeWidth={stroke}
+            />
+
+            {/* Layer 2: Glowing red active stroke */}
+            <path
+              id="track"
+              className="track-active"
+              d={pathData}
+              strokeWidth={stroke}
+            />
+
+            {/* Capsule car navigating the track */}
+            <g className="car">
+              <rect
+                x={-carLen / 2}
+                y={-carWid / 2}
+                width={carLen}
+                height={carWid}
+                rx={carWid / 2}
+                fill="#ffffff"
+              />
+              <circle cx={carLen / 4} cy="0" r={carWid / 3.5} fill="var(--red)" />
+            </g>
+          </svg>
+        </div>
+
+        {/* HUD Overlay controls */}
+        <div className="radar-hud">
+          <span className="radar-azimuth">{String(rotation).padStart(3, '0')}° AZ</span>
+          <button
+            type="button"
+            className="radar-reset-btn"
+            onClick={resetRotation}
+            title="Reset rotation to 0°"
+          >
+            ↺ 0°
+          </button>
+        </div>
+      </div>
+      <p className="radar-hint">DRAG DIAL TO ROTATE CIRCUIT</p>
     </div>
   );
 }
