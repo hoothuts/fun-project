@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Basic shapes created with Inkscape (http://www.inkscape.org/) -->
+<!-- Expanded and scripted Richard Walledge (www.geocities.com/kesmaster.geo) -->
+<svg onload="document.getElementById('yr_ctrls').style.visibility='visible'"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2767" version="1.0"
+   width="480" height="640"
+   sodipodi:version="0.32" inkscape:version="0.44.1"
+   sodipodi:docname="sarthe.svg" sodipodi:docbase="C:\Program Files\Inkscape">
+  <metadata id="metadata1877">
+    <rdf:RDF>
+      <cc:Work rdf:about="Semi-permanent course, Le Mans 24 Hours">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+<style type="text/css">
+  .grid      {fill:none;fill-opacity:0.75;fill-rule:evenodd;
+    stroke:#1e90ff;stroke-width:1.49961448;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1}
+  .trkshp    {fill:red;stroke:#a08070; stroke-width:2;stroke-linecap:round; stroke-linejoin:round;stroke-miterlimit:4; stroke-dashoffset:0;stroke-opacity:1}
+  .cor text, g text {font-family: 'Arial'; font-size: 15px; fill-opacity: 0.5; }
+  .cor text:hover,g text:hover {opacity: 1.0; fill-opacity: 1.0; stroke:black; stroke-width:0.3; }
+  tspan:hover {text-decoration:underline; fill:cyan}
+  #yr_ctrls {}
+</style>
+  <sodipodi:namedview
+     inkscape:window-height="573" inkscape:window-width="853"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff"
+     id="base"
+     inkscape:zoom="0.35824168"
+     inkscape:cx="372.04724" inkscape:cy="526.18109"
+     inkscape:window-x="66"  inkscape:window-y="87"
+     inkscape:current-layer="svg2767" />
+  <defs id="defs2769" /> 
+  <g id="layer1" >
+    <path
+       style="fill:#4682b4;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:2.99922895;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       d="M 30.580843,10 L 446.99554,10 C 481,12 479.23519,22.770106 479.23519,37.306868 L 479.23519,606.20536 C 485,620.74212 466,639 449.99554,632.445 L 30.580843,632.445 C 16.044082,632.445 4.3412018,630 4.3412018,606.20536 L 4.3412018,37.306868 C 4.3412018,14 16.044082,11.067226 30.580843,11.067226 z " id="backrect" />
+    <g id="g1554" transform="translate(5e-6,-10)"
+       style="fill:none;stroke:#1e90ff;stroke-opacity:1;display:inline">
+      <path id="path8926" d="M 74.96355,21.511998 L 74.96355,640" class="grid" />
+      <path id="path8928" d="M 149.9271,22.261974 L 149.9271,640" class="grid" />
+      <path id="path8930" d="M 224.89065,22.261974 L 224.89065,640" class="grid" />
+      <path id="path8932" d="M 299.8542,21.262003 L 299.8542,640" class="grid" />
+      <path id="path8934" d="M 374.81775,21.761991 L 374.81775,640" class="grid" />
+      <path id="path8936" d="M 449.7813,21.761981 L 449.7813,640" class="grid" />
+
+      <path id="path8938" d="M 4.99757,75.510481 L 480,75.510481" class="grid" />
+      <path id="path8940" d="M 4.4978081,150.50838 L 480,150.50838" class="grid" />
+      <path id="path8942" d="M 4.997568,225.35629 L 480,225.35629" class="grid" />
+      <path id="path8944" d="M 4.6977138,300.65418 L 480,300.65418" class="grid" />
+      <path id="path8946" d="M 4.997565,375.50208 L 480,375.50208" class="grid" />
+      <path id="path8948" d="M 4.997565,450.50208 L 480,450.50208" class="grid" />
+      <path id="path8950" d="M 4.997565,525.50208 L 480,525.50208" class="grid" />
+      <path id="path8952" d="M 4.997565,600.50208 L 480,600.50208" class="grid" />
+    </g>
+
+    <rect id="bord" width="474" height="621" x="5" y="11" rx="26" ry="26" style="fill:none;fill-opacity:1;fill-rule:nonzero; stroke:#1e90ff;stroke-width:2.99922895;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+
+<!-- Following is whole layout -->
+    <g id="dunlop">
+    <path
+       d="M 56.324733,243.02063 55.694863,241.5051 53.938133,239.74837 L 51.409393,237.21963 L 52.063353,221.57663 C 53.566793,185.61354 58.940513,154.93417 66.330023,140.12616 C 70.582603,131.60431 78.486493,124.43362 83.627123,124.43362 C 84.733803,124.43362 88.131153,123.50129 91.176783,122.36177 C 95.214143,120.8512 96.714293,119.777 96.714293,118.39657 C 96.714293,115.26208 102.28399,109.907 109.4547,106.14709 C 117.99792,101.66751 135.18799,95.119827 145.37824,92.463847 C 157.68408,89.256457 161.54647,85.411387 162.633,75.286437 C 163.00795,71.792387 163.82984,67.997027 164.45942,66.852307 C 166.21691,63.656757 176.39812,58.736487 187.2047,55.860197 L 196.95684,53.264567 L 200.91876,57.099087 C 203.327,59.429897 206.80005,64.855137 209.77514,70.933617 C 224.14081,100.28445 236.49177,156.22332 250.71464,256.35305 L 254.75146,284.77248 L 252.33292,288.35305 C 247.21327,283.30773 247.36485,282.11857 246.64133,276.93362 C 242.5907,247.90558 241.44815,239.91849 239.68152,228.28066 C 238.56717,220.93979 237.20468,211.78362 236.65377,207.93362 C 231.26159,170.25087 219.93489,118.46798 211.49931,92.933617 C 208.16178,82.830947 200.81495,67.177057 197.70023,63.531907 C 195.7094,61.202037 195.47699,61.168177 189.93115,62.399937 C 183.02644,63.933507 174.91774,66.941647 172.28672,68.945617 C 170.91848,69.987757 170.12974,72.319397 169.56855,76.980927 C 169.13364,80.593457 167.76979,85.341827 166.53714,87.535017 C 163.91054,92.208417 156.93905,97.154277 151.82054,97.975567 C 146.32442,98.857437 121.98216,107.29199 115.21429,110.65957 C 108.31512,114.09247 103.71429,118.04209 103.71429,120.53182 C 103.71429,121.48003 102.37131,123.38588 100.72989,124.76704 C 97.758743,127.2671 88.007223,131.43362 85.127123,131.43362 C 83.029853,131.43362 78.542553,133.86067 76.534293,136.08124 C 74.301223,138.55039 69.209563,148.94458 67.789203,153.93362 C 63.260903,169.8393 60.051413,193.74879 59.050013,219.03732 L 58.412323,235.14101 L 61.048073,235.80255 "
+       class="trkshp" id="dunlops" />
+    <text y="130px" x="110px">Dunlop</text>
+    <text y="100px" x="150px">Tertre Rouge</text>
+    </g>
+
+    <path id="hairpin" class="trkshp" style="visibility:hidden" 
+       d="M 51,234 L 138,-310 L 254,276 L 246,276 L 140,-260 L 58,234 z" />
+
+    <path
+       d="M 294.21429,624.37931 C 260.08064,617.15306 223.6015,599.13495 185.21429,570.54103 C 177.51429,564.80544 168.73981,558.0474 165.71544,555.52316 C 152.17351,544.22059 137.5181,531.4578 129.43801,523.93065 C 120.90803,515.98439 120.63457,515.58908 119.69381,509.84429 C 119.16144,506.59342 118.72327,503.58048 118.72008,503.14887 C 118.7169,502.71726 112.31377,502.49226 104.49091,502.64887 L 90.267533,502.93362 L 88.545303,485.43362 C 85.754963,457.08031 80.064483,437.89609 71.542583,428.11261 C 69.712023,426.01106 65.080933,422.41106 61.251273,420.11261 C 52.807273,415.04479 49.714293,410.88636 49.714293,404.60146                   C 62.770113,392.11064 59.443193,395.82074 57.673293,399.77392  54.753953,406.29448 57.180193,410.43268 66.987193,415.65976 C 70.220713,417.38321 74.448023,420.62487 76.381213,422.86346 C 86.023023,434.02844 93.511063,458.29308 95.291283,484.14067 C 95.674563,489.70559 96.346363,494.8383 96.784173,495.54669 C 97.424803,496.58325 99.984523,496.6164 109.89724,495.71649 C 119.76991,494.82022 122.47862,494.85338 123.54621,495.88359 C 124.27876,496.5905 125.36132,500.61234 125.95189,504.82101 L 127.02567,512.47315 L 136.11998,520.71288 C 186.22612,566.11059 225.67176,592.87954 265.95267,608.82111 C 274.21672,612.09169 296.24044,618.29543 299.87045,618.37523 C 302.31633,618.429 302.58197,618.03111 303.22589,613.34929 C 304.71129,602.54913 301.23084,564.35404 294.21241,514.43362 C 293.40049,508.65862 291.83888,497.55232 290.74218,489.75296
+L 295.97717,476.93362 L 297.80929,489.93362 C 298.81695,497.08362 300.08295,506.30862 300.62261,510.43362 C 301.16227,514.55862 302.51457,524.90862 303.62773,533.43362 C 308.03392,567.17791 309.87666,589.62517 309.54222,605.48088 C 309.27174,618.30439 308.90367,621.50163 307.44124,623.73088 C 305.38142,626.87075 305.86968,626.84681 294.21429,624.37931 z M 303.22589,613.34929  "
+       class="trkshp" id="indianapol" />
+
+    <path
+       style="fill:#ffffd0;fill-opacity:1;fill-rule:nonzero;stroke:#a08070;stroke-width:0.99999928;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       d="M 40.63968,182.23649 L 41.81858,189.18462 L 42.9975,196.13279 L 36.39076,193.67969 L 29.78404,191.22657 L 35.21184,186.73152 L 40.63968,182.23649 z "
+       id="path2402" />
+  </g>
+  <text y="50px" x="30px" style="font-family:'Century Gothic','Bookman Old Style','Arial black'; font-size:21px; font-weight:bold; fill:white">Circuit de la Sarthe, France</text>
+
+<path id="pathmulstraight" class="trkshp" style="visibility:hidden" 
+       d="M 246,270 L 253,270 L 298,490 L 291,490 z" />
+<path id="pathpreford" class="trkshp" style="visibility:hidden" 
+       d="M 50,406 L 57,406 L 59,231 L 52,231 z" />
+
+    <g id="porsford">
+    <path
+       d="M 69.712023,426.01106 65.080933,422.41106 61.251273,420.11261 C 52.807273,415.04479 49.714293,410.88636 49.714293,404.60146 C 49.714293,397.8718 52.938423,392.35186 61.539833,384.35528 C 77.736593,369.29744 77.613193,363.57101 60.776513,348.93362 C 51.080063,340.50378 48.975883,336.84156 50.639153,331.29009 C 51.314623,329.03554 53.064083,326.49976 54.851803,325.18395 C 59.080193,322.07177 60.348323,319.18812 61.772803,309.44605 C 62.965913,301.28632 62.842853,293.2092 61.056823,262.45 C 60.443283,251.88369 60.196143,250.81388 57.962883,249.0572 C 56.227273,247.69197 55.668383,246.4541 56.001303,244.71256 C 56.324733,243.02063 55.694863,241.5051 53.938133,239.74837 L 51.409393,237.21963 L 52.063353,221.57663 L 58.412323,235.14101 L 61.048073,235.80255 C 63.766313,236.48478 65.451163,240.071 64.373203,242.8801 C 64.066973,243.67813 64.542783,245.78709 65.430563,247.56669 C 67.544183,251.80354 70.018943,287.13842 69.168243,300.93362 C 68.105683,318.16451 66.158773,324.44247 60.113153,330.13264 C 58.243783,331.8921 56.714293,333.82097 56.714293,334.41903 C 56.714293,335.01709 61.204323,339.82737 66.692143,345.10854 C 77.486693,355.49662 80.714293,360.61571 80.714293,367.34822 C 80.714293,373.2469 78.168773,378.12818 72.325973,383.43362 C 62.770113,392.11064 59.443193,395.82074 57.673293,399.77392 C 54.753953,406.29448 57.180193,410.43268 66.987193,415.65976"
+       class="trkshp" id="preford" />
+    <text y="400px" x="9px">Porsche</text>
+    <text y="310px" x="80px">Maison Blanche</text>
+    <text y="270px" x="20px">Ford</text>
+    </g>
+
+    <g id="straightchic">
+    <path
+       d="M 254.75146,284.77248 L 252.33292,288.35305 C 251.00272,290.32236 249.63647,292.87541 249.29681,294.02649 C 248.45726,296.87169 251.84617,300.99201 256.21054,302.43238 C 258.99483,303.35128 259.86514,304.29863 260.64077,307.25477 L 289.13869,445.49747 C 296.29257,450.0881 299.00958,452.61872 299.7919,454.08277 C 302.01621,458.24542 301.45192,466.17587 298.52173,471.93362 L 295.97717,476.93362 L 297.80929,489.93362 C 298.81695,497.08362 300.08295,506.30862 300.62261,510.43362 C 301.16227,514.55862 302.51457,524.90862 303.62773,533.43362 C 293.40049,508.65862 291.83888,497.55232 290.74218,489.75296 L 288.74817,475.5723 L 291.73123,469.90141 C 296.52949,460.77978 295.29619,456.24601 287.08313,452.81437 C 285.18241,452.0202 283.42818,450.82214 283.18485,450.15202 C 282.83264,449.18204 274.19642,407.68864 269.7147,385.43362 C 264.51121,359.59446 254.56242,311.55591 254.13042,310.18362 C 253.82742,309.22112 253.03737,308.43362 252.37475,308.43362 C 251.71212,308.43362 249.5034,307.05989 247.46648,305.38088 C 241.30332,300.30068 240.55397,292.69784 245.52548,285.68764 C 247.21327,283.30773 247.36485,282.11857 246.64133,276.93362 C 242.5907,247.90558 241.44815,239.91849 239.68152,228.28066 "
+       class="trkshp" style="stroke-linecap:butt" id="path23870" />
+    <text y="301px" x="260px">Chicane 1</text>
+    <text y="470px" x="309px">Chicane 2</text>
+    </g>
+
+  <g id="bugatti" style="visibility:hidden">
+  <path id="pathbugatti"
+     d="M 57.267563,226.29797 C 53.79871,217.92134 58.358663,209.06565 58.328088,200.47751 C 60.833852,183.18459 60.797453,165.36906 66.6012,148.60642 C 71.945402,135.40174 84.914849,126.08637 99.132641,120.97951 C 111.9465,115.39344 124.84174,109.92825 138.08991,105.20777 C 145.96493,103.64082 145.21726,116.70636 145.72098,115.90033 C 151.15417,106.00786 167.66077,113.2081 159.71204,122.81916 C 154.50475,129.71497 147.78259,135.58844 142.26655,142.30912 C 128.62288,157.17996 114.32667,171.5945 101.61517,187.13102 C 97.716613,199.19709 99.916621,212.30911 94.967741,224.11518 C 87.521995,233.46391 82.611392,217.61897 78.232236,214.41865 C 68.174873,212.26929 66.181374,227.63213 58.181588,227.06315 C 57.876906,226.80809 57.572234,226.55303 57.267563,226.29797 z M 91.064808,222.42346 C 97.06555,209.48922 92.344162,194.24812 100.06808,181.75894 C 118.58641,160.73956 138.67161,140.7372 156.84011,119.44481 C 158.951,111.97474 149.01919,117.3202 147.90697,121.2697 C 136.77172,132.7951 127.29866,145.66326 114.87823,156.15512 C 105.00602,162.17548 93.953127,149.19101 101.77124,141.56673 C 108.75524,134.1455 118.73018,129.56257 127.09788,123.49189 C 131.30902,120.43274 147.28173,113.23947 136.4051,110.05459 C 126.68653,113.11835 117.88929,118.33462 108.17725,121.5904 C 92.324476,127.46 75.252406,135.9979 69.852746,151.65809 C 64.57744,166.24689 65.170964,181.81128 62.681533,196.85844 C 61.701507,204.84736 60.67254,212.83878 60.226522,220.86938 C 66.226381,216.01876 74.050881,204.67116 82.976139,212.02292 C 86.164836,214.92705 85.192222,222.48996 91.064808,222.42346 z M 113.32599,152.25761 C 124.20616,141.55769 134.27217,130.21526 143.84725,118.56581 C 132.05757,124.37897 121.83359,132.39816 110.70698,139.13363 C 103.04715,141.89111 99.759881,155.38546 111.61413,153.15396 L 112.4926,152.7755 L 113.32599,152.25761 L 113.32599,152.25761 z "
+     style="fill:purple" />
+
+  <text y="230px" x="100px">Garage Bleu</text>
+  </g>
+
+  <text id="yr_ctrls" y="105px" x="300px" style="fill:#33ff00; visibility:hidden">Version:
+    <tspan x="300px" dy="17px" onclick="document.getElementById('dunlop').style.visibility=document.getElementById('porsford').style.visibility=document.getElementById('straightchic').style.visibility='hidden'; document.getElementById('hairpin').style.visibility=document.getElementById('pathpreford').style.visibility=document.getElementById('pathmulstraight').style.visibility='visible'">1920s</tspan>
+    <tspan onclick="document.getElementById('hairpin').style.visibility=document.getElementById('porsford').style.visibility=document.getElementById('straightchic').style.visibility='hidden'; document.getElementById('dunlop').style.visibility=document.getElementById('pathpreford').style.visibility=document.getElementById('pathmulstraight').style.visibility='visible'">1970s</tspan>
+    <tspan x="300px" dy="17px" onclick="document.getElementById('hairpin').style.visibility=document.getElementById('straightchic').style.visibility=document.getElementById('pathpreford').style.visibility='hidden';
+document.getElementById('dunlop').style.visibility=document.getElementById('porsford').style.visibility=document.getElementById('pathmulstraight').style.visibility='visible'">1980s</tspan>
+    <tspan  onclick="document.getElementById('hairpin').style.visibility=document.getElementById('pathpreford').style.visibility=document.getElementById('pathmulstraight').style.visibility='hidden';
+document.getElementById('dunlop').style.visibility=document.getElementById('porsford').style.visibility=document.getElementById('straightchic').style.visibility='visible'">1990s</tspan>
+    <tspan x="300px" dy="17px" onclick="if(document.getElementById('bugatti').style.visibility!='visible') document.getElementById('bugatti').style.visibility='visible'; else document.getElementById('bugatti').style.visibility='hidden'">
+Toggle Bugatti short track</tspan>
+  </text>
+
+  <g class="cor">
+    <text y="190px" x="65px">Start</text>
+    <text y="180px" x="240px">Hunaudieres</text>
+    <text y="580px" x="320px">Mulsanne</text>
+    <text y="510px" x="140px">Indianapolis</text>
+    <text y="510px" x="40px">Arnage</text>
+  </g>
+</svg>

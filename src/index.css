@@ -1,0 +1,646 @@
+:root {
+  --carbon: #0d0f12;
+  --panel: #15181e;
+  --panel-2: #1a1e26;
+  --line: #242a33;
+  --ink: #eef0f3;
+  --muted: #767e8c;
+  --red: #e10600;
+  --white: #ffffff;
+
+  --font-display: 'Anton', 'Archivo', 'Arial Narrow', sans-serif;
+  --font-body: 'Archivo', system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+
+  --kerb: repeating-linear-gradient(135deg, var(--red) 0 10px, var(--white) 10px 20px);
+  --glow: 0 0 18px color-mix(in srgb, currentColor 45%, transparent);
+
+  color-scheme: dark;
+  font: 16px/1.5 var(--font-body);
+  color: var(--ink);
+  background: var(--carbon);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--carbon);
+}
+
+::selection {
+  background: var(--red);
+  color: var(--white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.app {
+  min-height: 100svh;
+}
+
+.content {
+  max-width: 1126px;
+  margin: 0 auto;
+  padding: 2.5rem clamp(1.25rem, 4vw, 2.5rem) 4rem;
+}
+
+/* ── Topbar ─────────────────────────────────────────────── */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem clamp(1.25rem, 4vw, 2.5rem);
+  background: rgba(13, 15, 18, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  background: var(--red);
+  color: var(--white);
+  font: 400 0.85rem/1 var(--font-display);
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--red) 45%, transparent);
+}
+
+.brand-name {
+  font: 600 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.28em;
+  color: var(--muted);
+}
+
+.brand:hover .brand-name {
+  color: var(--ink);
+}
+
+.tabs {
+  display: flex;
+  gap: 1.4rem;
+}
+
+.tab {
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font: 600 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--red);
+}
+
+/* ── Shared hero ────────────────────────────────────────── */
+
+.hero {
+  margin-bottom: 2.75rem;
+}
+
+.hero::after {
+  content: '';
+  display: block;
+  width: min(300px, 55%);
+  height: 8px;
+  margin-top: 1.75rem;
+  background: var(--kerb);
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  font: 600 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.24em;
+  color: var(--red);
+}
+
+.display {
+  margin: 0;
+  font: 400 clamp(3rem, 9vw, 6.5rem)/0.95 var(--font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.display .char {
+  display: inline-block;
+  will-change: transform, filter;
+}
+
+.hero-sub {
+  margin: 1.25rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.error {
+  margin: 0 0 1.5rem;
+  font: 400 0.8rem/1.4 var(--font-mono);
+  color: #ff5a5a;
+}
+
+/* ── Starting lights ────────────────────────────────────── */
+
+.lights {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(13, 15, 18, 0.85) 100%);
+}
+
+.light {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ff1f1f;
+  box-shadow: 0 0 20px 6px rgba(255, 45, 45, 0.5);
+}
+
+/* ── Team grid ──────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.team-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.4rem 1.4rem 1.15rem;
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+  box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.card-pos {
+  font: 700 2.2rem/1 var(--font-mono);
+  letter-spacing: -0.02em;
+  text-shadow: var(--glow);
+}
+
+.card-name {
+  font: 400 1.15rem/1.1 var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.card-meta {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: auto;
+  font: 400 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.card-points {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.card-flag {
+  position: absolute;
+  top: 1.15rem;
+  right: 1.4rem;
+  font: 400 0.62rem/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── Team detail ────────────────────────────────────────── */
+
+.back {
+  margin-bottom: 2.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.22em;
+  color: var(--muted);
+}
+
+.back:hover {
+  color: var(--red);
+}
+
+.detail-header {
+  margin-bottom: 1rem;
+}
+
+.detail-header .display {
+  font-size: clamp(2.6rem, 7vw, 5.25rem);
+  text-shadow: 0 0 34px color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.detail-header .eyebrow {
+  color: var(--muted);
+}
+
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  font: 400 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stat strong {
+  margin-right: 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.section-title {
+  margin: 3rem 0 1.1rem;
+  font: 600 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.26em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 0.6rem;
+  background: var(--red);
+  border-radius: 1px;
+}
+
+.drivers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.driver-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.3rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.driver-num {
+  font: 700 1.8rem/1 var(--font-mono);
+  text-shadow: var(--glow);
+}
+
+.driver-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.driver-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.driver-code {
+  font: 600 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.driver-dob {
+  font: 400 0.68rem/1.4 var(--font-mono);
+  color: var(--muted);
+}
+
+.history {
+  border-top: 1px solid var(--line);
+}
+
+.hist-row {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.hist-year {
+  font: 600 0.78rem/1 var(--font-mono);
+  color: var(--muted);
+}
+
+.hist-bar {
+  height: 8px;
+  background: var(--panel-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hist-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.hist-pos {
+  font: 600 0.78rem/1 var(--font-mono);
+  text-align: right;
+}
+
+.hist-nums {
+  font: 400 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ── Tracks ─────────────────────────────────────────────── */
+
+.filter {
+  width: min(460px, 100%);
+  margin-top: 1.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  font: 400 0.85rem/1 var(--font-mono);
+}
+
+.filter::placeholder {
+  color: var(--muted);
+}
+
+.filter:focus {
+  border-color: var(--red);
+  outline: none;
+}
+
+.track-group {
+  margin-bottom: 2.5rem;
+}
+
+.group-title {
+  margin: 0 0 0.6rem;
+  font: 400 1.35rem/1 var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.track-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.72rem 0.5rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, padding 0.15s ease;
+}
+
+.track-row:hover {
+  background: var(--panel);
+  padding-inline: 0.9rem;
+}
+
+.track-name {
+  font-weight: 500;
+}
+
+.track-loc {
+  font: 400 0.72rem/1 var(--font-mono);
+  color: var(--muted);
+}
+
+.track-go {
+  font: 400 0.9rem/1 var(--font-mono);
+  color: var(--red);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.track-row:hover .track-go {
+  opacity: 1;
+}
+
+/* ── Track circuit ──────────────────────────────────────── */
+
+.circuit {
+  display: block;
+  width: min(460px, 100%);
+  margin: 2.25rem 0 0 auto;
+  position: relative;
+}
+
+.circuit svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.circuit svg #track {
+  fill: none;
+  stroke: var(--red);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.circuit-img {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.car {
+  position: absolute;
+  width: 16px;
+  height: 8px;
+  left: -8px;
+  top: -4px;
+  background: var(--ink);
+  border-right: 3px solid var(--red);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(238, 240, 243, 0.7), 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* ── Circuit detail ─────────────────────────────────────── */
+
+.winners {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.winner-label {
+  margin: 0 0 0.75rem;
+  font: 400 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.winner-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+.winner-count {
+  font: 400 0.85rem/1 var(--font-mono);
+  color: var(--red);
+}
+
+.race-log {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.race-row {
+  display: grid;
+  grid-template-columns: 3.5rem 1.2fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 0.92rem;
+}
+
+.race-row:hover {
+  background: var(--panel);
+}
+
+.race-year {
+  font: 400 0.8rem/1 var(--font-mono);
+  color: var(--red);
+}
+
+.race-name {
+  font-weight: 500;
+}
+
+.race-winner {
+  color: var(--ink);
+}
+
+.race-fl {
+  font: 400 0.72rem/1 var(--font-mono);
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .brand-name {
+    display: none;
+  }
+
+  .winners {
+    grid-template-columns: 1fr;
+  }
+
+  .race-row {
+    grid-template-columns: 3rem 1fr auto;
+  }
+
+  .race-fl {
+    grid-column: 2 / 4;
+  }
+
+  .hist-row {
+    grid-template-columns: 3.5rem 1fr auto;
+  }
+
+  .hist-nums {
+    grid-column: 2 / 4;
+    text-align: left;
+    padding-left: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
+
+  .car {
+    display: none;
+  }
+}
