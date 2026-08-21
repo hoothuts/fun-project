@@ -20,17 +20,20 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
   const [history, setHistory] = useState(null);
   const [error, setError] = useState(null);
 
-  const meta = circuitMeta[circuit.circuitId];
+  const cid = circuit?.circuitId;
+  const meta = circuitMeta[cid] || circuitMeta[cid?.replace(/_/g, '-')] || circuitMeta[cid?.replace(/-/g, '_')];
   const layouts = useMemo(() => meta?.layouts || [], [meta]);
   const [selectedLayout, setSelectedLayout] = useState(null);
 
-  const bio = circuitBios[circuit.circuitId] || null;
+  const bio = circuitBios[cid] || circuitBios[cid?.replace(/_/g, '-')] || circuitBios[cid?.replace(/-/g, '_')] || null;
 
   useEffect(() => {
     setSelectedLayout(meta?.defaultLayout || (layouts[layouts.length - 1]?.id ?? null));
-  }, [circuit.circuitId, meta, layouts]);
+  }, [cid, meta, layouts]);
 
-  const activeFile = selectedLayout ? `${selectedLayout}.svg` : circuitMap[circuit.circuitId];
+  const activeFile = selectedLayout
+    ? `${selectedLayout}.svg`
+    : (circuitMap[cid] || circuitMap[cid?.replace(/_/g, '-')] || circuitMap[cid?.replace(/-/g, '_')] || 'silverstone-8.svg');
 
   useEffect(() => {
     setHistory(null);
