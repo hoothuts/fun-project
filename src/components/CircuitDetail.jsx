@@ -92,12 +92,7 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
 
   return (
     <section className="detail circuit-detail-page">
-      <IdentityBackdrop
-        type="circuit"
-        circuitId={circuit.circuitId}
-        lat={circuit.Location?.lat}
-        long={circuit.Location?.long}
-      />
+      <IdentityBackdrop type="circuit" />
 
       <button className="back" onClick={onBack}>
         ← THE TRACKS
@@ -160,6 +155,12 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
                 <div className="spec-item">
                   <span className="spec-label">INAUGURAL WIN</span>
                   <span className="spec-value">{stats.firstWinner.name} ({stats.firstWinner.season})</span>
+                </div>
+              )}
+              {(circuit.Location?.lat && circuit.Location?.long) && (
+                <div className="spec-item">
+                  <span className="spec-label">GPS LOCATION</span>
+                  <span className="spec-value">{parseFloat(circuit.Location.lat).toFixed(2)}°N, {parseFloat(circuit.Location.long).toFixed(2)}°E</span>
                 </div>
               )}
             </div>
