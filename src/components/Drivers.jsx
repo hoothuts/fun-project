@@ -5,6 +5,7 @@ import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import EraSeasonSelector from './EraSeasonSelector.jsx';
+import TiltCard from './TiltCard.jsx';
 
 export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'current' }) {
   const [season, setSeason] = useState(initialSeason);
@@ -62,45 +63,47 @@ export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'cur
           const team = d.Constructors?.[0];
           const color = teamColor(team?.constructorId);
           return (
-            <div
+            <TiltCard
               key={d.Driver.driverId}
-              className="driver-standings-card"
+              className="driver-card-tilt"
               style={{ '--accent': color }}
               onClick={() => onOpenDriver(d.Driver.driverId)}
             >
-              <div className="card-top">
-                <span className="card-pos" style={{ color }}>
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="driver-badge-num" style={{ color }}>
-                  #{d.Driver.permanentNumber || d.Driver.code || '—'}
-                </span>
-              </div>
+              <div className="driver-standings-card">
+                <div className="card-top">
+                  <span className="card-pos" style={{ color }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="driver-badge-num" style={{ color }}>
+                    #{d.Driver.permanentNumber || d.Driver.code || '—'}
+                  </span>
+                </div>
 
-              <div className="card-driver-body">
-                <span className="driver-first-name">{d.Driver.givenName}</span>
-                <span className="card-name">{d.Driver.familyName}</span>
-                {team && (
-                  <button
-                    className="team-tag"
-                    style={{ '--accent': color }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onOpenTeam(team.constructorId);
-                    }}
-                  >
-                    <span className="team-dot" style={{ background: color }} />
-                    {team.name}
-                  </button>
-                )}
-              </div>
+                <div className="card-driver-body">
+                  <span className="driver-first-name">{d.Driver.givenName}</span>
+                  <span className="card-name">{d.Driver.familyName}</span>
+                  {team && (
+                    <button
+                      className="team-tag"
+                      style={{ '--accent': color }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenTeam(team.constructorId);
+                      }}
+                    >
+                      <span className="team-dot" style={{ background: color }} />
+                      {team.name}
+                    </button>
+                  )}
+                </div>
 
-              <div className="card-meta">
-                <span className="card-points">{d.points} PTS</span>
-                <span className="card-wins">{d.wins} WINS</span>
+                <div className="card-meta">
+                  <span className="card-points">{d.points} PTS</span>
+                  <span className="card-wins">{d.wins} WINS</span>
+                </div>
+                <span className="card-flag">{d.Driver.nationality}</span>
               </div>
-              <span className="card-flag">{d.Driver.nationality}</span>
-            </div>
+            </TiltCard>
           );
         })}
       </div>

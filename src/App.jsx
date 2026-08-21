@@ -6,6 +6,8 @@ import Tracks from './components/Tracks.jsx';
 import TeamDetail from './components/TeamDetail.jsx';
 import DriverDetail from './components/DriverDetail.jsx';
 import CircuitDetail from './components/CircuitDetail.jsx';
+import CommandPalette from './components/CommandPalette.jsx';
+import SpeedlineCanvas from './components/SpeedlineCanvas.jsx';
 import { getCircuits } from './api.js';
 
 import ErrorBoundary from './components/ErrorBoundary.jsx';
@@ -13,9 +15,25 @@ import ErrorBoundary from './components/ErrorBoundary.jsx';
 export default function App() {
   const [route, setRoute] = useState({ view: 'teams', id: null });
   const [circuitsCache, setCircuitsCache] = useState(null);
+  const [isCmdOpen, setIsCmdOpen] = useState(false);
 
   useEffect(() => {
     getCircuits().then(setCircuitsCache).catch(() => {});
+  }, []);
+
+  // Global keyboard shortcut for Command Palette (Cmd+K / Ctrl+K / /)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCmdOpen((prev) => !prev);
+      } else if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        setIsCmdOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
   const parseHash = useCallback(() => {
@@ -82,11 +100,27 @@ export default function App() {
 
   return (
     <div className="app">
+      <SpeedlineCanvas />
+
       <header className="topbar">
         <button className="brand" onClick={() => navigate('teams')}>
           <span className="brand-mark">F1</span>
           <span className="brand-name">GRID ARCHIVE</span>
         </button>
+
+        <div className="topbar-center">
+          <button
+            type="button"
+            className="cmd-trigger-btn"
+            onClick={() => setIsCmdOpen(true)}
+            title="Search tracks, drivers, teams (⌘K)"
+          >
+            <span className="cmd-trigger-icon">⌕</span>
+            <span className="cmd-trigger-text">Search F1 Archive…</span>
+            <span className="cmd-trigger-kbd">⌘K</span>
+          </button>
+        </div>
+
         <nav className="tabs">
           <button
             className={`tab ${route.view === 'teams' ? 'active' : ''}`}
@@ -114,6 +148,12 @@ export default function App() {
           </button>
         </nav>
       </header>
+
+      <CommandPalette
+        isOpen={isCmdOpen}
+        onClose={() => setIsCmdOpen(false)}
+        onNavigate={navigate}
+      />
 
       <main className="content">
         <ErrorBoundary>

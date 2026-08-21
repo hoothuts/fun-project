@@ -5,6 +5,7 @@ import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import EraSeasonSelector from './EraSeasonSelector.jsx';
+import TiltCard from './TiltCard.jsx';
 
 function StartingLights({ onOut }) {
   const ref = useRef(null);
@@ -84,22 +85,24 @@ export default function Grid({ onOpenTeam, initialSeason = 'current' }) {
         {data?.standings.map((t, i) => {
           const color = teamColor(t.Constructor.constructorId);
           return (
-            <button
+            <TiltCard
               key={t.Constructor.constructorId}
-              className="team-card"
+              className="team-card-tilt"
               style={{ '--accent': color }}
               onClick={() => onOpenTeam(t.Constructor.constructorId, t)}
             >
-              <span className="card-pos" style={{ color }}>
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="card-name">{t.Constructor.name}</span>
-              <span className="card-meta">
-                <span className="card-points">{t.points} PTS</span>
-                <span className="card-wins">{t.wins} WINS</span>
-              </span>
-              <span className="card-flag">{t.Constructor.nationality}</span>
-            </button>
+              <div className="team-card">
+                <span className="card-pos" style={{ color }}>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="card-name">{t.Constructor.name}</span>
+                <span className="card-meta">
+                  <span className="card-points">{t.points} PTS</span>
+                  <span className="card-wins">{t.wins} WINS</span>
+                </span>
+                <span className="card-flag">{t.Constructor.nationality}</span>
+              </div>
+            </TiltCard>
           );
         })}
       </div>
