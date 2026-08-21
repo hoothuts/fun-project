@@ -43,22 +43,27 @@ export default function Tracks({ onOpenCircuit }) {
 
   return (
     <section className="tracks-view">
-      <header className="hero">
-        <p className="eyebrow">{circuits ? 'SILVERSTONE 1950 — TODAY' : 'LOADING CIRCUITS…'}</p>
-        <BootTitle>CIRCUITS</BootTitle>
-        <p className="hero-sub">
-          {circuits
-            ? `All ${circuits.length} tracks to ever host a Formula 1 Grand Prix.`
-            : 'Every track that has hosted a Grand Prix.'}
-        </p>
-        <input
-          className="filter"
-          type="search"
-          placeholder="Filter by name, city or country…"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <TrackCircuit file={circuitMap.silverstone || 'silverstone-8.svg'} />
+      <header className="tracks-hero-grid">
+        <div className="tracks-hero-info">
+          <p className="eyebrow">{circuits ? 'SILVERSTONE 1950 — TODAY' : 'LOADING CIRCUITS…'}</p>
+          <BootTitle>CIRCUITS</BootTitle>
+          <p className="hero-sub">
+            {circuits
+              ? `All ${circuits.length} tracks to ever host a Formula 1 Grand Prix.`
+              : 'Every track that has hosted a Grand Prix.'}
+          </p>
+          <input
+            className="filter"
+            type="search"
+            placeholder="Filter by name, city or country…"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+        </div>
+
+        <div className="tracks-hero-preview">
+          <TrackCircuit file={circuitMap.silverstone || 'silverstone-8.svg'} />
+        </div>
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}

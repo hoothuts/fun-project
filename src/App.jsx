@@ -104,7 +104,6 @@ export default function App() {
 
       <header className="topbar">
         <button className="brand" onClick={() => navigate('teams')}>
-          <span className="brand-mark">F1</span>
           <span className="brand-name">GRID ARCHIVE</span>
         </button>
 
