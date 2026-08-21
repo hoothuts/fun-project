@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { animate, stagger } from 'animejs';
+import { createTimeline, stagger } from 'animejs';
 import { getStandings } from '../api.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
@@ -17,13 +17,28 @@ function StartingLights({ onOut }) {
       return;
     }
     const lights = el.querySelectorAll('.light');
-    animate([
-      { targets: lights, opacity: [0.12, 1], duration: 160, delay: stagger(260), ease: 'outQuad' },
-      { targets: lights, opacity: 0.12, duration: 500, delay: 1000 },
-      { targets: el, opacity: 0, duration: 240 },
-    ]);
-    const timer = setTimeout(onOut, 2600);
-    return () => clearTimeout(timer);
+    const tl = createTimeline({
+      onComplete: onOut,
+    });
+
+    tl.add(lights, {
+      opacity: [0.12, 1],
+      duration: 160,
+      delay: stagger(260),
+      ease: 'outQuad',
+    })
+      .add(lights, {
+        opacity: 0.12,
+        duration: 200,
+        delay: 800,
+      })
+      .add(el, {
+        opacity: 0,
+        duration: 240,
+        delay: 100,
+      });
+
+    return () => tl.revert();
   }, [onOut]);
   return (
     <div className="lights" ref={ref} aria-label="Starting lights">
