@@ -96,6 +96,20 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
       <div className="race-log" ref={listRef}>
         {data?.recentResults?.map((r) => {
           const tColor = teamColor(r.constructorId);
+          const isP1 = r.position === '1';
+          const isP2 = r.position === '2';
+          const isP3 = r.position === '3';
+          const isPts = +r.points > 0;
+          const posClass = isP1
+            ? 'p1-gold'
+            : isP2
+            ? 'p2-silver'
+            : isP3
+            ? 'p3-bronze'
+            : isPts
+            ? 'points-finish'
+            : 'default-finish';
+
           return (
             <div className="race-row" key={`${r.season}-${r.round}-${r.raceName}`}>
               <span className="race-year">{r.season}</span>
@@ -108,10 +122,12 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
                 <span className="team-dot" style={{ background: tColor }} />
                 {r.constructor}
               </button>
-              <span className="race-pos-finish" style={{ color: r.position === '1' ? 'var(--red)' : 'inherit' }}>
+              <span className={`pos-badge ${posClass}`}>
                 P{r.position}
               </span>
-              <span className="race-points">{r.points > 0 ? `+${r.points} PTS` : '0 PTS'}</span>
+              <span className={`race-points ${isPts ? 'is-points' : ''}`}>
+                {r.points > 0 ? `+${r.points} PTS` : '0 PTS'}
+              </span>
             </div>
           );
         })}

@@ -123,7 +123,7 @@ export default function TrackCircuit({ file }) {
       .then((text) => {
         if (!live) return;
         const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
-        const path = doc.querySelector('#track');
+        const path = doc.querySelector('#track') || doc.querySelector('path');
         const d = path?.getAttribute('d');
         const bb = d && trackBBox(d);
         if (!bb || bb.w <= 0 || bb.h <= 0) {

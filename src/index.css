@@ -7,6 +7,11 @@
   --muted: #767e8c;
   --red: #e10600;
   --white: #ffffff;
+  --purple: #b138dd;
+  --purple-glow: 0 0 14px rgba(177, 56, 221, 0.4);
+  --gold: #ffd700;
+  --silver: #d1d5db;
+  --bronze: #cd7f32;
 
   --font-display: 'Anton', 'Archivo', 'Arial Narrow', sans-serif;
   --font-body: 'Archivo', system-ui, 'Segoe UI', sans-serif;
@@ -146,6 +151,95 @@ button {
   background: var(--kerb);
 }
 
+.hero-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.hero-top .eyebrow {
+  margin: 0;
+}
+
+.era-selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.era-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(14, 16, 20, 0.9);
+  border: 1px solid var(--line);
+  padding: 0.2rem 0.3rem;
+  border-radius: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.era-tab {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font: 700 0.62rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  padding: 0.35rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.era-tab:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.era-tab.is-active {
+  color: #ffffff;
+  background: var(--red);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.4);
+}
+
+.season-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.season-pill {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: 600 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.season-pill:hover {
+  border-color: rgba(225, 6, 0, 0.4);
+  color: var(--ink);
+}
+
+.season-pill.active {
+  border-color: rgba(225, 6, 0, 0.8);
+  background: rgba(225, 6, 0, 0.12);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(225, 6, 0, 0.2);
+}
+
 .eyebrow {
   margin: 0 0 1rem;
   font: 600 0.72rem/1 var(--font-mono);
@@ -155,10 +249,21 @@ button {
 
 .display {
   margin: 0;
-  font: 400 clamp(3rem, 9vw, 6.5rem)/0.95 var(--font-display);
+  font: 400 clamp(2.8rem, 7.5vw, 5.8rem)/0.96 var(--font-display);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--ink);
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.title-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.title-space {
+  display: inline;
 }
 
 .display .char {
@@ -671,6 +776,65 @@ button {
   opacity: 0.75;
 }
 
+/* ── Historical Layout Switcher ─────────────────────────── */
+
+.layout-switcher {
+  margin: -1rem 0 2.2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.layout-switcher-label {
+  font: 700 0.65rem/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.layout-switcher-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.layout-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(21, 24, 30, 0.85);
+  border: 1px solid var(--line);
+  padding: 0.4rem 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.layout-pill:hover {
+  border-color: rgba(225, 6, 0, 0.5);
+  background: #1c2028;
+  transform: translateY(-1px);
+}
+
+.layout-pill.is-active {
+  border-color: var(--red);
+  background: rgba(225, 6, 0, 0.14);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.25), inset 0 0 8px rgba(225, 6, 0, 0.1);
+}
+
+.layout-pill-seasons {
+  font: 600 0.72rem/1 var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.layout-pill.is-active .layout-pill-seasons {
+  color: #ffffff;
+  font-weight: 700;
+}
+
 /* ── Circuit detail ─────────────────────────────────────── */
 
 .winners {
@@ -776,51 +940,112 @@ button {
   color: var(--ink);
 }
 
-/* ── Hero top & Season Picker ───────────────────────────── */
+/* ── Broadcast Timing & Position Accents ────────────────── */
 
-.hero-top {
-  display: flex;
+.pos-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
-}
-
-.hero-top .eyebrow {
-  margin: 0;
-}
-
-.season-picker {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
-  max-width: 100%;
-}
-
-.season-pill {
-  padding: 0.25rem 0.6rem;
-  border: 1px solid var(--line);
+  justify-content: center;
+  font: 700 0.75rem/1 var(--font-mono);
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  background: var(--panel);
+  letter-spacing: 0.06em;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.pos-badge.p1-gold {
+  color: #000000;
+  background: linear-gradient(135deg, #ffd700, #ffae00);
+  box-shadow: 0 0 14px rgba(255, 215, 0, 0.45);
+  font-weight: 800;
+}
+
+.pos-badge.p2-silver {
+  color: #000000;
+  background: linear-gradient(135deg, #f3f4f6, #9ca3af);
+  box-shadow: 0 0 10px rgba(209, 213, 219, 0.3);
+  font-weight: 800;
+}
+
+.pos-badge.p3-bronze {
+  color: #ffffff;
+  background: linear-gradient(135deg, #cd7f32, #8b4513);
+  box-shadow: 0 0 10px rgba(205, 127, 50, 0.3);
+  font-weight: 800;
+}
+
+.pos-badge.points-finish {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.pos-badge.default-finish {
   color: var(--muted);
-  font: 600 0.65rem/1 var(--font-mono);
+  background: transparent;
+}
+
+.race-points.is-points {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Fastest Lap Purple Highlights */
+.race-fl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(177, 56, 221, 0.1);
+  border: 1px solid rgba(177, 56, 221, 0.35);
+  transition: all 0.18s ease;
+  cursor: pointer;
+}
+
+.race-fl-badge:hover {
+  background: rgba(177, 56, 221, 0.22);
+  border-color: var(--purple);
+  box-shadow: var(--purple-glow);
+}
+
+.fl-tag {
+  font: 800 0.58rem/1 var(--font-mono);
+  background: var(--purple);
+  color: #ffffff;
+  padding: 0.15rem 0.3rem;
+  border-radius: 2px;
   letter-spacing: 0.08em;
-  white-space: nowrap;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  box-shadow: 0 0 8px rgba(177, 56, 221, 0.6);
 }
 
-.season-pill:hover {
-  color: var(--ink);
-  border-color: var(--muted);
+.fl-driver {
+  font-weight: 600;
+  color: #ffffff;
 }
 
-.season-pill.active {
-  background: var(--panel-2);
-  border-color: var(--red);
-  color: var(--ink);
+.fl-time {
+  font: 600 0.72rem/1 var(--font-mono);
+  color: #d896ff;
+  letter-spacing: 0.04em;
+}
+
+.stat-fl-pill {
+  display: inline-block;
+  font: 800 0.55rem/1 var(--font-mono);
+  background: var(--purple);
+  color: #ffffff;
+  padding: 0.15rem 0.35rem;
+  border-radius: 2px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+  box-shadow: 0 0 8px rgba(177, 56, 221, 0.6);
+}
+
+.stat-fl strong {
+  color: #d896ff;
+  text-shadow: 0 0 12px rgba(177, 56, 221, 0.4);
 }
 
 .loading-state {

@@ -4,8 +4,7 @@ import { getDriverStandings } from '../api.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
-
-const SEASONS = ['current', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014'];
+import EraSeasonSelector from './EraSeasonSelector.jsx';
 
 export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'current' }) {
   const [season, setSeason] = useState(initialSeason);
@@ -49,17 +48,7 @@ export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'cur
           <p className="eyebrow">
             {data ? `${data.season} DRIVERS CHAMPIONSHIP · ROUND ${data.round}` : 'LOADING STANDINGS…'}
           </p>
-          <div className="season-picker">
-            {SEASONS.map((s) => (
-              <button
-                key={s}
-                className={`season-pill ${season === s ? 'active' : ''}`}
-                onClick={() => setSeason(s)}
-              >
-                {s === 'current' ? 'CURRENT' : s}
-              </button>
-            ))}
-          </div>
+          <EraSeasonSelector season={season} onSelectSeason={setSeason} />
         </div>
         <BootTitle>DRIVERS</BootTitle>
         <p className="hero-sub">World Championship Standings. Tap a driver for career stats.</p>

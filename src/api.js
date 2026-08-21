@@ -74,50 +74,90 @@ export async function getTeamHistory(teamId) {
 }
 
 export async function getDriverDetail(driverId) {
-  const [bioData, resultsData, winsData] = await Promise.all([
+  const [bioData, seasonsData, countData, winsData, p2Data, p3Data] = await Promise.all([
     get(`${BASE}/drivers/${driverId}.json`),
-    get(`${BASE}/drivers/${driverId}/results.json?limit=100`),
-    get(`${BASE}/drivers/${driverId}/results/1.json?limit=100`).catch(() => ({ MRData: { total: '0' } })),
+    get(`${BASE}/drivers/${driverId}/seasons.json?limit=100`),
+    get(`${BASE}/drivers/${driverId}/results.json?limit=1`),
+    get(`${BASE}/drivers/${driverId}/results/1.json?limit=1`).catch(() => ({ MRData: { total: '0' } })),
+    get(`${BASE}/drivers/${driverId}/results/2.json?limit=1`).catch(() => ({ MRData: { total: '0' } })),
+    get(`${BASE}/drivers/${driverId}/results/3.json?limit=1`).catch(() => ({ MRData: { total: '0' } })),
   ]);
 
   const driver = bioData.MRData.DriverTable.Drivers[0];
-  const totalRaces = +resultsData.MRData.total || 0;
+  const seasons = (seasonsData.MRData?.SeasonTable?.Seasons || []).map((s) => s.season);
+  const totalRaces = +countData.MRData.total || 0;
   const totalWins = +winsData.MRData.total || 0;
-  const races = resultsData.MRData.RaceTable?.Races || [];
+  const p2Count = +p2Data.MRData.total || 0;
+  const p3Count = +p3Data.MRData.total || 0;
+  const podiums = totalWins + p2Count + p3Count;
 
-  let podiums = 0;
-  let points = 0;
-  let highestPos = Infinity;
-  for (const r of races) {
-    const pos = +r.Results[0]?.position;
-    if (pos >= 1 && pos <= 3) podiums++;
-    if (pos && pos < highestPos) highestPos = pos;
-    points += +r.Results[0]?.points || 0;
+  // Fetch recent races from the driver's latest active seasons (up to 2 recent seasons)
+  const targetRecentSeasons = seasons.slice(-2).reverse();
+  const recentSeasonResults = await Promise.all(
+    targetRecentSeasons.map(async (y) => {
+      try {
+        const d = await get(`${BASE}/${y}/drivers/${driverId}/results.json?limit=100`);
+        return d.MRData?.RaceTable?.Races || [];
+      } catch {
+        return [];
+      }
+    })
+  );
+
+  const allRecentRaces = recentSeasonResults.flat();
+  allRecentRaces.sort((a, b) => {
+    if (a.season !== b.season) return +b.season - +a.season;
+    return +b.round - +a.round;
+  });
+
+  const recentResults = allRecentRaces.slice(0, 12).map((r) => ({
+    season: r.season,
+    round: r.round,
+    raceName: r.raceName,
+    date: r.date,
+    position: r.Results[0]?.positionText || '—',
+    grid: r.Results[0]?.grid,
+    points: r.Results[0]?.points,
+    constructor: r.Results[0]?.Constructor?.name,
+    constructorId: r.Results[0]?.Constructor?.constructorId,
+    status: r.Results[0]?.status,
+  }));
+
+  // Fetch driver season standings in parallel to compute true career points and best finish
+  const standings = await Promise.all(
+    seasons.map(async (y) => {
+      try {
+        const d = await get(`${BASE}/${y}/drivers/${driverId}/driverStandings.json`);
+        const ds = d.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings?.[0];
+        return ds ? { points: +ds.points || 0, pos: +ds.position || Infinity } : null;
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  const validStandings = standings.filter(Boolean);
+  const totalPoints = validStandings.reduce((sum, s) => sum + s.points, 0);
+  const bestChampPos = validStandings.reduce((min, s) => Math.min(min, s.pos), Infinity);
+
+  let bestFinish = '—';
+  if (totalWins > 0) {
+    bestFinish = 'P1';
+  } else if (p2Count > 0) {
+    bestFinish = 'P2';
+  } else if (p3Count > 0) {
+    bestFinish = 'P3';
+  } else if (bestChampPos !== Infinity) {
+    bestFinish = `P${bestChampPos}`;
   }
-
-  const recentResults = races
-    .slice(-12)
-    .reverse()
-    .map((r) => ({
-      season: r.season,
-      round: r.round,
-      raceName: r.raceName,
-      date: r.date,
-      position: r.Results[0]?.positionText || '—',
-      grid: r.Results[0]?.grid,
-      points: r.Results[0]?.points,
-      constructor: r.Results[0]?.Constructor?.name,
-      constructorId: r.Results[0]?.Constructor?.constructorId,
-      status: r.Results[0]?.status,
-    }));
 
   return {
     driver,
     totalRaces,
     totalWins,
     podiums,
-    points,
-    bestFinish: highestPos !== Infinity ? `P${highestPos}` : '—',
+    points: totalPoints,
+    bestFinish,
     recentResults,
   };
 }

@@ -4,8 +4,7 @@ import { getSchedule } from '../api.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
-
-const SEASONS = ['current', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017'];
+import EraSeasonSelector from './EraSeasonSelector.jsx';
 
 const formatDate = (dStr) => {
   if (!dStr) return '—';
@@ -52,17 +51,7 @@ export default function Calendar({ onOpenCircuit, onOpenDriver, onOpenTeam, init
           <p className="eyebrow">
             {schedule?.length ? `${season.toUpperCase()} CALENDAR · ${schedule.length} ROUNDS` : 'LOADING CALENDAR…'}
           </p>
-          <div className="season-picker">
-            {SEASONS.map((s) => (
-              <button
-                key={s}
-                className={`season-pill ${season === s ? 'active' : ''}`}
-                onClick={() => setSeason(s)}
-              >
-                {s === 'current' ? 'CURRENT' : s}
-              </button>
-            ))}
-          </div>
+          <EraSeasonSelector season={season} onSelectSeason={setSeason} />
         </div>
         <BootTitle>SCHEDULE</BootTitle>
         <p className="hero-sub">Grand Prix dates, circuits, and race winners. Tap a track to inspect layout.</p>

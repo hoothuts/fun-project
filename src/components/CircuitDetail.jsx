@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getCircuitHistory } from '../api.js';
-import { circuitMap } from '../circuitMaps.js';
+import { circuitMap, circuitMeta } from '../circuitMaps.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import TrackCircuit from './TrackCircuit.jsx';
@@ -18,6 +18,16 @@ const top = (m) => [...m.entries()].sort((a, b) => b[1].count - a[1].count).slic
 export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTeam }) {
   const [history, setHistory] = useState(null);
   const [error, setError] = useState(null);
+
+  const meta = circuitMeta[circuit.circuitId];
+  const layouts = useMemo(() => meta?.layouts || [], [meta]);
+  const [selectedLayout, setSelectedLayout] = useState(null);
+
+  useEffect(() => {
+    setSelectedLayout(meta?.defaultLayout || (layouts[layouts.length - 1]?.id ?? null));
+  }, [circuit.circuitId, meta, layouts]);
+
+  const activeFile = selectedLayout ? `${selectedLayout}.svg` : circuitMap[circuit.circuitId];
 
   useEffect(() => {
     setHistory(null);
@@ -93,7 +103,8 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
           <span className="stat">
             <ScrambleNumber value={stats?.last} delay={350} /> LAST GP
           </span>
-          <span className="stat">
+          <span className="stat stat-fl">
+            <span className="stat-fl-pill">FL</span>
             <strong>{stats?.lapRecord?.time ?? '–'}</strong> LAP RECORD
           </span>
         </p>
@@ -101,7 +112,25 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
 
       {error && <p className="error">{error} — refresh to retry.</p>}
 
-      <TrackCircuit file={circuitMap[circuit.circuitId]} />
+      <TrackCircuit file={activeFile} />
+
+      {layouts.length > 1 && (
+        <div className="layout-switcher">
+          <span className="layout-switcher-label">TRACK LAYOUTS</span>
+          <div className="layout-switcher-pills">
+            {layouts.map((l) => (
+              <button
+                key={l.id}
+                type="button"
+                className={`layout-pill ${selectedLayout === l.id ? 'is-active' : ''}`}
+                onClick={() => setSelectedLayout(l.id)}
+              >
+                <span className="layout-pill-seasons">{l.seasons}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <h2 className="section-title">MOST WINS</h2>
       <div className="winners">
@@ -158,10 +187,12 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
               <span className="race-fl">
                 {r.fastest?.name ? (
                   <button
-                    className="race-link-btn muted"
+                    className="race-link-btn race-fl-badge"
                     onClick={() => r.fastest.driverId && onOpenDriver && onOpenDriver(r.fastest.driverId)}
                   >
-                    {r.fastest.name} {r.fastest.time}
+                    <span className="fl-tag">FL</span>
+                    <span className="fl-driver">{r.fastest.name}</span>
+                    <span className="fl-time">{r.fastest.time}</span>
                   </button>
                 ) : (
                   '—'

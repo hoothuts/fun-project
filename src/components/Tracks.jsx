@@ -4,6 +4,7 @@ import { getCircuits } from '../api.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import TrackCircuit from './TrackCircuit.jsx';
+import { circuitMap } from '../circuitMaps.js';
 
 export default function Tracks({ onOpenCircuit }) {
   const [circuits, setCircuits] = useState(null);
@@ -57,7 +58,7 @@ export default function Tracks({ onOpenCircuit }) {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <TrackCircuit file="Circuit Silverstone 2010 infobox.svg" />
+        <TrackCircuit file={circuitMap.silverstone || 'silverstone-8.svg'} />
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}

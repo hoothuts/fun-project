@@ -4,8 +4,7 @@ import { getStandings } from '../api.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
-
-const SEASONS = ['current', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014'];
+import EraSeasonSelector from './EraSeasonSelector.jsx';
 
 function StartingLights({ onOut }) {
   const ref = useRef(null);
@@ -71,17 +70,7 @@ export default function Grid({ onOpenTeam, initialSeason = 'current' }) {
           <p className="eyebrow">
             {data ? `${data.season} SEASON · ROUND ${data.round}` : 'LOADING THE GRID…'}
           </p>
-          <div className="season-picker">
-            {SEASONS.map((s) => (
-              <button
-                key={s}
-                className={`season-pill ${season === s ? 'active' : ''}`}
-                onClick={() => setSeason(s)}
-              >
-                {s === 'current' ? 'CURRENT' : s}
-              </button>
-            ))}
-          </div>
+          <EraSeasonSelector season={season} onSelectSeason={setSeason} />
         </div>
         <BootTitle>THE GRID</BootTitle>
         <p className="hero-sub">Constructors Championship. Tap a team to open its garage.</p>
