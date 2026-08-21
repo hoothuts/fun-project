@@ -70,11 +70,6 @@ export default function IdentityBackdrop({ type, teamId, teamName, number, code,
             GPS: {parseFloat(lat).toFixed(4)}°N · {parseFloat(long).toFixed(4)}°E
           </div>
         )}
-        <div className="sector-splits">
-          <span className="sector s1">S1</span>
-          <span className="sector s2">S2</span>
-          <span className="sector s3">S3</span>
-        </div>
         <div className="identity-glow" />
       </div>
     );
