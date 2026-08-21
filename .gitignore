@@ -1,5 +1,33 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production & Build Outputs
+dist/
+dist-ssr/
+build/
+*.local
+
+# Environment Variables & Private Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.pem
+*.key
+*.cert
+*.crt
+
+# Cloudflare & Wrangler Local State
+.wrangler/
+.cloudflare/
+.mf/
+
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,18 +35,31 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# Editor & IDE settings
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.swo
+*.swp
+
+# OS Metadata & System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Chat Logs & Temp artifacts
+chat-log-*.md
+*.tmp
+*.temp
+scratch/
