@@ -1613,39 +1613,6 @@ button.driver-card:hover .driver-card-go {
   color: var(--muted);
 }
 
-.gps-coordinate-stamp {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  font: 600 0.68rem/1 var(--font-mono);
-  letter-spacing: 0.16em;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-  background: rgba(13, 15, 18, 0.6);
-}
-
-.sector-splits {
-  position: absolute;
-  top: 3.5rem;
-  right: 1.5rem;
-  display: flex;
-  gap: 0.35rem;
-}
-
-.sector {
-  font: 700 0.6rem/1 var(--font-mono);
-  padding: 0.2rem 0.45rem;
-  border-radius: 3px;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-}
-
-.sector.s1 { color: #f5ff00; border-color: rgba(245, 255, 0, 0.3); }
-.sector.s2 { color: #0ad6ff; border-color: rgba(10, 214, 255, 0.3); }
-.sector.s3 { color: #ff0606; border-color: rgba(255, 6, 6, 0.3); }
-
 .identity-glow {
   position: absolute;
   top: -60px;

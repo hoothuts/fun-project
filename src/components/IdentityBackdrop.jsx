@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { animate } from 'animejs';
 
-export default function IdentityBackdrop({ type, teamId, teamName, number, code, lat, long, accentColor }) {
+export default function IdentityBackdrop({ type, teamId, teamName, number, code, accentColor }) {
   const arcRef = useRef(null);
 
   useEffect(() => {
@@ -65,11 +65,6 @@ export default function IdentityBackdrop({ type, teamId, teamName, number, code,
   if (type === 'circuit') {
     return (
       <div className="identity-backdrop circuit-backdrop" aria-hidden="true">
-        {(lat && long) && (
-          <div className="gps-coordinate-stamp">
-            GPS: {parseFloat(lat).toFixed(4)}°N · {parseFloat(long).toFixed(4)}°E
-          </div>
-        )}
         <div className="identity-glow" />
       </div>
     );
