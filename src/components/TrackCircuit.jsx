@@ -12,6 +12,7 @@ const parsePath = (svgText) => {
     if (!path) return null;
     const d = path.getAttribute('d');
     if (!d) return null;
+    const transform = path.getAttribute('transform') || '';
 
     const svgEl = doc.querySelector('svg');
     const vb = svgEl?.getAttribute('viewBox');
@@ -22,7 +23,7 @@ const parsePath = (svgText) => {
         bb = { x: parts[0], y: parts[1], w: parts[2], h: parts[3] };
       }
     }
-    return { d, bb: bb || { x: 0, y: 0, w: 500, h: 500 } };
+    return { d, transform, bb: bb || { x: 0, y: 0, w: 500, h: 500 } };
   } catch {
     return null;
   }
@@ -116,12 +117,14 @@ export default function TrackCircuit({ file }) {
 
   if (state === 'img') {
     return (
-      <div className="circuit" aria-hidden="true">
-        <img
-          className="circuit-img"
-          src={`/circuit/${encodeURIComponent(file)}`}
-          alt=""
-        />
+      <div className="circuit-3d-stage" aria-hidden="true">
+        <div className="circuit-rotator" ref={ref}>
+          <img
+            className="circuit-img"
+            src={`/circuit/${encodeURIComponent(file)}`}
+            alt=""
+          />
+        </div>
       </div>
     );
   }
@@ -144,32 +147,34 @@ export default function TrackCircuit({ file }) {
     <div className="circuit-3d-stage" aria-hidden="true">
       <div className="circuit-rotator" ref={ref}>
         <svg viewBox={viewBox} className="track-svg">
-          {/* Layer 1: Dimmed static track base outline */}
-          <path
-            className="track-base"
-            d={pathData}
-            strokeWidth={stroke}
-          />
-
-          {/* Layer 2: Glowing red active stroke */}
-          <path
-            id="track"
-            className="track-active"
-            d={pathData}
-            strokeWidth={stroke}
-          />
-
-          {/* Capsule car navigating the track */}
-          <g className="car">
-            <rect
-              x={-carLen / 2}
-              y={-carWid / 2}
-              width={carLen}
-              height={carWid}
-              rx={carWid / 2}
-              fill="#ffffff"
+          <g transform={track?.transform || undefined}>
+            {/* Layer 1: Dimmed static track base outline */}
+            <path
+              className="track-base"
+              d={pathData}
+              strokeWidth={stroke}
             />
-            <circle cx={carLen / 4} cy="0" r={carWid / 3.5} fill="var(--red)" />
+
+            {/* Layer 2: Glowing red active stroke */}
+            <path
+              id="track"
+              className="track-active"
+              d={pathData}
+              strokeWidth={stroke}
+            />
+
+            {/* Capsule car navigating the track */}
+            <g className="car">
+              <rect
+                x={-carLen / 2}
+                y={-carWid / 2}
+                width={carLen}
+                height={carWid}
+                rx={carWid / 2}
+                fill="#ffffff"
+              />
+              <circle cx={carLen / 4} cy="0" r={carWid / 3.5} fill="var(--red)" />
+            </g>
           </g>
         </svg>
       </div>

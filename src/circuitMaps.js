@@ -2,6 +2,7 @@
 export const circuitMap = {
   "adelaide": "adelaide-1.svg",
   "ain-diab": "ain-diab-1.svg",
+  "ain_diab": "ain-diab-1.svg",
   "aintree": "aintree-1.svg",
   "albert_park": "melbourne-2.svg",
   "americas": "austin-1.svg",
@@ -96,6 +97,20 @@ export const circuitMeta = {
     ]
   },
   "ain-diab": {
+    "julesId": "ain-diab",
+    "name": "Ain-Diab Circuit",
+    "countryId": "morocco",
+    "defaultLayout": "ain-diab-1",
+    "layouts": [
+      {
+        "id": "ain-diab-1",
+        "file": "ain-diab-1.svg",
+        "seasons": "1958",
+        "orientation": null
+      }
+    ]
+  },
+  "ain_diab": {
     "julesId": "ain-diab",
     "name": "Ain-Diab Circuit",
     "countryId": "morocco",

@@ -21,6 +21,13 @@ export const circuitBios = {
     length: "7.618 km",
     direction: "Clockwise",
   },
+  'ain_diab': {
+    lore: "A fierce coastal road circuit laid out along the Atlantic coast and the Oasis road in Casablanca. It hosted the dramatic 1958 Moroccan Grand Prix that crowned Mike Hawthorn as Britain's first World Champion.",
+    type: "Road Circuit",
+    turns: 12,
+    length: "7.618 km",
+    direction: "Clockwise",
+  },
   aintree: {
     lore: "Set within the famous Grand National horse racing venue near Liverpool, Aintree hosted five British Grands Prix in the 1950s and 60s, including Stirling Moss's iconic 1955 home triumph for Mercedes.",
     type: "Permanent Road Course",
