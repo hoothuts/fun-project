@@ -6,6 +6,7 @@ import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import EraSeasonSelector from './EraSeasonSelector.jsx';
 import TiltCard from './TiltCard.jsx';
+import SeasonProgress from './SeasonProgress.jsx';
 
 function StartingLights({ onOut }) {
   const ref = useRef(null);
@@ -90,6 +91,7 @@ export default function Grid({ onOpenTeam, initialSeason = 'current' }) {
         </div>
         <BootTitle>THE GRID</BootTitle>
         <p className="hero-sub">Constructors Championship. Tap a team to open its garage.</p>
+        <SeasonProgress season={season} />
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}

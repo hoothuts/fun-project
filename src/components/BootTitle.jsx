@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { animate, stagger } from 'animejs';
 
-export default function BootTitle({ className = 'display', children, style, delay = 0 }) {
+export default function BootTitle({ className = 'display', children, firstName, lastName, style, delay = 0 }) {
   const ref = useRef(null);
   const text = typeof children === 'string' ? children : String(children || '');
 
@@ -9,15 +9,18 @@ export default function BootTitle({ className = 'display', children, style, dela
     const len = text.length;
     const s = { ...style };
     if (len > 28) {
-      s.fontSize = 'clamp(1.85rem, 4.2vw, 3.2rem)';
+      s.fontSize = 'clamp(1.7rem, 4.0vw, 3.0rem)';
       s.lineHeight = '1.02';
     } else if (len > 20) {
-      s.fontSize = 'clamp(2.2rem, 5.2vw, 4.2rem)';
+      s.fontSize = 'clamp(2.05rem, 4.9vw, 3.95rem)';
       s.lineHeight = '1.0';
     }
     return s;
   }, [text, style]);
 
+  const isStacked = Boolean(firstName && lastName);
+  const firstWords = useMemo(() => (firstName ? String(firstName).trim().split(' ').filter(Boolean) : []), [firstName]);
+  const lastWords = useMemo(() => (lastName ? String(lastName).trim().split(' ').filter(Boolean) : []), [lastName]);
   const words = useMemo(() => text.split(' '), [text]);
 
   useEffect(() => {
@@ -38,7 +41,38 @@ export default function BootTitle({ className = 'display', children, style, dela
     return () => {
       anim.revert();
     };
-  }, [text, delay]);
+  }, [text, firstName, lastName, delay]);
+
+  if (isStacked) {
+    return (
+      <h1 className={`${className} is-stacked-driver-name`.trim()} style={dynamicStyle} ref={ref} aria-label={text}>
+        <span className="driver-name-first-line">
+          {firstWords.map((word, wIdx) => (
+            <span className="title-word title-word-regular" key={`first-${word}-${wIdx}`}>
+              {word.split('').map((c, cIdx) => (
+                <span className="char" key={`first-${word}-${cIdx}`} aria-hidden="true">
+                  {c}
+                </span>
+              ))}
+              {wIdx < firstWords.length - 1 && <span className="title-space">&nbsp;</span>}
+            </span>
+          ))}
+        </span>
+        <span className="driver-name-last-line">
+          {lastWords.map((word, wIdx) => (
+            <span className="title-word title-word-bold" key={`last-${word}-${wIdx}`}>
+              {word.split('').map((c, cIdx) => (
+                <span className="char" key={`last-${word}-${cIdx}`} aria-hidden="true">
+                  {c}
+                </span>
+              ))}
+              {wIdx < lastWords.length - 1 && <span className="title-space">&nbsp;</span>}
+            </span>
+          ))}
+        </span>
+      </h1>
+    );
+  }
 
   return (
     <h1 className={className} style={dynamicStyle} ref={ref} aria-label={text}>
