@@ -1,3 +1,39 @@
+@font-face {
+  font-family: 'Formula1 Regular';
+  src: url('/fonts/Formula1-Regular.woff2') format('woff2'),
+       url('/fonts/Formula1-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Formula1 Bold';
+  src: url('/fonts/Formula1-Bold.woff2') format('woff2'),
+       url('/fonts/Formula1-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Formula1 Wide';
+  src: url('/fonts/Formula1-Wide.woff2') format('woff2'),
+       url('/fonts/Formula1-Wide.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Formula1 Black';
+  src: url('/fonts/Formula1-Black.woff2') format('woff2'),
+       url('/fonts/Formula1-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --carbon: #0d0f12;
   --panel: #15181e;
@@ -13,8 +49,8 @@
   --silver: #d1d5db;
   --bronze: #cd7f32;
 
-  --font-display: 'Anton', 'Archivo', 'Arial Narrow', sans-serif;
-  --font-body: 'Archivo', system-ui, 'Segoe UI', sans-serif;
+  --font-display: 'Formula1 Bold', 'Formula1 Wide', 'Anton', sans-serif;
+  --font-body: 'Archivo', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
 
   --kerb: repeating-linear-gradient(135deg, var(--red) 0 10px, var(--white) 10px 20px);
