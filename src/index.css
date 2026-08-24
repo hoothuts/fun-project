@@ -1346,6 +1346,155 @@ button.driver-card:hover .driver-card-go {
   text-align: right;
 }
 
+/* ── Driver Dossier & Heritage Lore Card ────────────────── */
+
+.driver-dossier-card {
+  margin: 1.75rem 0 2.25rem 0;
+  padding: 1.4rem 1.6rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent, var(--red));
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.dossier-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.dossier-tag-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dossier-badge {
+  font: 700 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.15em;
+  color: var(--accent, var(--red));
+  background: color-mix(in srgb, var(--accent, var(--red)) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent, var(--red)) 40%, transparent);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.dossier-label {
+  font: 700 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+
+.dossier-nickname {
+  font: 700 0.85rem/1 var(--font-mono);
+  color: var(--accent, var(--red));
+  letter-spacing: 0.06em;
+}
+
+.dossier-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.dossier-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dossier-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dossier-k {
+  font: 600 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.dossier-v {
+  font: 600 0.82rem/1.3 var(--font-mono);
+  color: var(--ink);
+}
+
+.dossier-v.is-gold {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+}
+
+.dossier-teams-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.dossier-team-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font: 500 0.72rem/1 var(--font-mono);
+  color: var(--ink);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  padding: 0.2rem 0.45rem;
+  border-radius: 3px;
+}
+
+.dossier-arrow {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.dossier-lore-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.dossier-lore {
+  margin: 0;
+  font: 400 0.88rem/1.6 var(--font-body);
+  color: var(--ink);
+}
+
+.dossier-trivia-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: rgba(225, 6, 0, 0.06);
+  border: 1px solid rgba(225, 6, 0, 0.22);
+  border-radius: 6px;
+}
+
+.trivia-icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.dossier-trivia {
+  margin: 0;
+  font: 400 0.78rem/1.55 var(--font-mono);
+  color: var(--ink);
+}
+
 /* ── Calendar / Schedule view ───────────────────────────── */
 
 .cal-list {
@@ -3341,6 +3490,11 @@ button.driver-card:hover .driver-card-go {
     align-items: flex-start;
     gap: 0.6rem;
     padding: 0.75rem 1rem;
+  }
+
+  .dossier-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .track-telemetry-widget {
