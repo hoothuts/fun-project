@@ -195,6 +195,65 @@ export async function getSchedule(season = 'current') {
   }));
 }
 
+export async function getRaceResults(season, round) {
+  const [resData, schedData] = await Promise.all([
+    get(`${BASE}/${season}/${round}/results.json?limit=100`).catch(() => null),
+    get(`${BASE}/${season}/${round}.json`).catch(() => null),
+  ]);
+
+  const raceRes = resData?.MRData?.RaceTable?.Races?.[0];
+  const raceSched = schedData?.MRData?.RaceTable?.Races?.[0];
+  const race = raceRes || raceSched;
+  if (!race) return null;
+
+  const results = (raceRes?.Results || []).map((r) => {
+    const gridPos = +r.grid || null;
+    const finPos = +r.position || null;
+    let gridDelta = null;
+    if (gridPos && finPos) {
+      gridDelta = gridPos - finPos;
+    }
+
+    return {
+      position: r.positionText || r.position,
+      numericPosition: finPos,
+      number: r.number,
+      points: r.points,
+      driver: `${r.Driver?.givenName} ${r.Driver?.familyName}`,
+      driverCode: r.Driver?.code || r.Driver?.familyName?.slice(0, 3).toUpperCase(),
+      driverId: r.Driver?.driverId,
+      driverNationality: r.Driver?.nationality,
+      constructor: r.Constructor?.name,
+      constructorId: r.Constructor?.constructorId,
+      grid: r.grid,
+      gridDelta,
+      laps: r.laps,
+      status: r.status,
+      time: r.Time?.time || null,
+      fastestLap: r.FastestLap
+        ? {
+            rank: r.FastestLap.rank,
+            lap: r.FastestLap.lap,
+            time: r.FastestLap.Time?.time,
+            speed: r.FastestLap.AverageSpeed?.speed,
+          }
+        : null,
+      isFastestLap: r.FastestLap?.rank === '1',
+    };
+  });
+
+  return {
+    season: race.season,
+    round: race.round,
+    raceName: race.raceName,
+    circuit: race.Circuit,
+    date: race.date,
+    time: race.time,
+    results,
+    isUpcoming: results.length === 0,
+  };
+}
+
 export async function getCircuits() {
   const data = await get(`${BASE}/circuits.json?limit=100`);
   return data.MRData.CircuitTable.Circuits.map((c) => ({

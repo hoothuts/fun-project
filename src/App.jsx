@@ -6,6 +6,7 @@ import Tracks from './components/Tracks.jsx';
 import TeamDetail from './components/TeamDetail.jsx';
 import DriverDetail from './components/DriverDetail.jsx';
 import CircuitDetail from './components/CircuitDetail.jsx';
+import RaceDetail from './components/RaceDetail.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import SpeedlineCanvas from './components/SpeedlineCanvas.jsx';
 import { getCircuits } from './api.js';
@@ -38,14 +39,17 @@ export default function App() {
 
   const parseHash = useCallback(() => {
     const hash = window.location.hash.replace(/^#\/?/, '') || 'teams';
-    const [path, id] = hash.split('/');
+    const parts = hash.split('/');
+    const path = parts[0];
 
-    if (path === 'team' && id) {
-      setRoute({ view: 'team', id });
-    } else if (path === 'driver' && id) {
-      setRoute({ view: 'driver', id });
-    } else if (path === 'circuit' && id) {
-      setRoute({ view: 'circuit', id });
+    if (path === 'race' && parts[1] && parts[2]) {
+      setRoute({ view: 'race', season: parts[1], round: parts[2] });
+    } else if (path === 'team' && parts[1]) {
+      setRoute({ view: 'team', id: parts[1] });
+    } else if (path === 'driver' && parts[1]) {
+      setRoute({ view: 'driver', id: parts[1] });
+    } else if (path === 'circuit' && parts[1]) {
+      setRoute({ view: 'circuit', id: parts[1] });
     } else if (path === 'drivers') {
       setRoute({ view: 'drivers', id: null });
     } else if (path === 'schedule' || path === 'calendar') {
@@ -65,6 +69,10 @@ export default function App() {
 
   const navigate = (newHash) => {
     window.location.hash = newHash;
+  };
+
+  const handleOpenRace = (season, round) => {
+    navigate(`race/${season}/${round}`);
   };
 
   const handleOpenTeam = (teamId) => {
@@ -134,7 +142,7 @@ export default function App() {
             Drivers
           </button>
           <button
-            className={`tab ${route.view === 'schedule' ? 'active' : ''}`}
+            className={`tab ${route.view === 'schedule' || route.view === 'race' ? 'active' : ''}`}
             onClick={() => navigate('schedule')}
           >
             Schedule
@@ -156,6 +164,17 @@ export default function App() {
 
       <main className="content">
         <ErrorBoundary>
+          {route.view === 'race' && (
+            <RaceDetail
+              season={route.season}
+              round={route.round}
+              onBack={() => handleBack('schedule')}
+              onOpenDriver={handleOpenDriver}
+              onOpenTeam={handleOpenTeam}
+              onOpenCircuit={handleOpenCircuit}
+            />
+          )}
+
           {route.view === 'team' && (
             <TeamDetail
               team={route.id}
@@ -194,6 +213,7 @@ export default function App() {
 
           {route.view === 'schedule' && (
             <Calendar
+              onOpenRace={handleOpenRace}
               onOpenCircuit={handleOpenCircuit}
               onOpenDriver={handleOpenDriver}
               onOpenTeam={handleOpenTeam}
