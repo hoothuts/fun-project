@@ -1,29 +1,115 @@
 const BASE = 'https://api.jolpi.ca/ergast/f1';
-const cache = new Map();
+const memoryCache = new Map();
+const inflightPromises = new Map();
 const driverDetailCache = new Map();
 
-async function get(url, retries = 5, delay = 600) {
-  if (cache.has(url)) return cache.get(url);
+// ponytail: Jolpi Ergast API rate-limits at ~4 req/s and omits CORS headers on 429 responses.
+// Throttle concurrency to max 2 and ensure >= 180ms gap to eliminate 429 lockouts.
+const MAX_CONCURRENT = 2;
+const MIN_GAP_MS = 180;
+let activeCount = 0;
+let lastRequestTime = 0;
+let cooldownUntil = 0;
+const queue = [];
+
+function getStorage(key) {
+  try {
+    const raw = sessionStorage.getItem(`f1_cache_${key}`);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function setStorage(key, data) {
+  try {
+    sessionStorage.setItem(`f1_cache_${key}`, JSON.stringify(data));
+  } catch {
+    // Quota exceeded or private mode, gracefully ignored
+  }
+}
+
+function triggerCooldown(durationMs = 2500) {
+  cooldownUntil = Math.max(cooldownUntil, Date.now() + durationMs);
+}
+
+function processQueue() {
+  if (queue.length === 0 || activeCount >= MAX_CONCURRENT) return;
+  const now = Date.now();
+  if (now < cooldownUntil) {
+    setTimeout(processQueue, cooldownUntil - now + 50);
+    return;
+  }
+  const timeSinceLast = now - lastRequestTime;
+  if (timeSinceLast < MIN_GAP_MS) {
+    setTimeout(processQueue, MIN_GAP_MS - timeSinceLast);
+    return;
+  }
+
+  const task = queue.shift();
+  if (!task) return;
+
+  activeCount++;
+  lastRequestTime = Date.now();
+
+  task().finally(() => {
+    activeCount--;
+    processQueue();
+  });
+}
+
+function enqueue(fn) {
+  return new Promise((resolve, reject) => {
+    queue.push(() => fn().then(resolve, reject));
+    processQueue();
+  });
+}
+
+async function fetchWithRetry(url, retries = 4, delay = 600) {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url);
+      const res = await enqueue(() => fetch(url));
       if (res.status === 429) {
+        triggerCooldown(2500 + attempt * 1000);
         if (attempt < retries) {
-          const waitTime = Math.max(1200, delay * Math.pow(1.8, attempt) + Math.random() * 200);
+          const waitTime = Math.max(1500, delay * Math.pow(2, attempt) + Math.random() * 400);
           await new Promise((r) => setTimeout(r, waitTime));
           continue;
         }
+        throw new Error(`Rate limit exceeded (429)`);
       }
       if (!res.ok) throw new Error(`Timing screen unreachable (${res.status})`);
       const data = await res.json();
-      cache.set(url, data);
+      memoryCache.set(url, data);
+      setStorage(url, data);
       return data;
     } catch (err) {
+      // Cloudflare 429 error pages lack CORS headers, causing fetch() to throw a TypeError in browser
+      triggerCooldown(2500 + attempt * 1000);
       if (attempt === retries) throw err;
-      const waitTime = Math.max(1200, delay * Math.pow(1.8, attempt) + Math.random() * 200);
+      const waitTime = Math.max(1500, delay * Math.pow(2, attempt) + Math.random() * 400);
       await new Promise((r) => setTimeout(r, waitTime));
     }
   }
+}
+
+async function get(url, retries = 4, delay = 600) {
+  if (memoryCache.has(url)) return memoryCache.get(url);
+  const stored = getStorage(url);
+  if (stored) {
+    memoryCache.set(url, stored);
+    return stored;
+  }
+  if (inflightPromises.has(url)) {
+    return inflightPromises.get(url);
+  }
+
+  const p = fetchWithRetry(url, retries, delay).finally(() => {
+    inflightPromises.delete(url);
+  });
+
+  inflightPromises.set(url, p);
+  return p;
 }
 
 export async function getStandings(season = 'current') {
@@ -56,31 +142,45 @@ export async function getTeamHistory(teamId) {
   const seasons = (sData.MRData?.SeasonTable?.Seasons || []).map((s) => s.season);
   if (!seasons.length) return [];
 
-  const targetSeasons = seasons.slice(-15).reverse();
-  const results = await Promise.all(
-    targetSeasons.map(async (y) => {
-      try {
-        const d = await get(`${BASE}/${y}/constructors/${teamId}/constructorStandings.json`);
-        const item = d.MRData?.StandingsTable?.StandingsLists?.[0]?.ConstructorStandings?.[0];
-        if (!item) return null;
-        return {
-          season: y,
-          position: item.position,
-          positionText: item.positionText,
-          points: item.points,
-          wins: item.wins,
-        };
-      } catch {
-        return null;
-      }
-    })
-  );
-  return results.filter(Boolean);
+  // Limit to most recent 12 seasons and batch in chunks of 2 to avoid bursting the API
+  const targetSeasons = seasons.slice(-12).reverse();
+  const results = [];
+
+  for (let i = 0; i < targetSeasons.length; i += 2) {
+    const chunk = targetSeasons.slice(i, i + 2);
+    const chunkRes = await Promise.all(
+      chunk.map(async (y) => {
+        try {
+          const d = await get(`${BASE}/${y}/constructors/${teamId}/constructorStandings.json`);
+          const item = d.MRData?.StandingsTable?.StandingsLists?.[0]?.ConstructorStandings?.[0];
+          if (!item) return null;
+          return {
+            season: y,
+            position: item.position,
+            positionText: item.positionText,
+            points: item.points,
+            wins: item.wins,
+          };
+        } catch {
+          return null;
+        }
+      })
+    );
+    results.push(...chunkRes.filter(Boolean));
+  }
+
+  return results;
 }
 
 export async function getDriverDetail(driverId) {
   if (driverDetailCache.has(driverId)) {
     return driverDetailCache.get(driverId);
+  }
+
+  const stored = getStorage(`driver_detail_${driverId}`);
+  if (stored) {
+    driverDetailCache.set(driverId, stored);
+    return stored;
   }
 
   // Fetch page 1 of all race results (covers 100% of races for 90% of all F1 drivers)
@@ -165,6 +265,7 @@ export async function getDriverDetail(driverId) {
   };
 
   driverDetailCache.set(driverId, detail);
+  setStorage(`driver_detail_${driverId}`, detail);
   return detail;
 }
 
