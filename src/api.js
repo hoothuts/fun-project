@@ -1,14 +1,18 @@
 const BASE = 'https://api.jolpi.ca/ergast/f1';
 const cache = new Map();
+const driverDetailCache = new Map();
 
-async function get(url, retries = 3, delay = 400) {
+async function get(url, retries = 5, delay = 600) {
   if (cache.has(url)) return cache.get(url);
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       const res = await fetch(url);
-      if (res.status === 429 && attempt < retries) {
-        await new Promise((r) => setTimeout(r, delay * Math.pow(2, attempt)));
-        continue;
+      if (res.status === 429) {
+        if (attempt < retries) {
+          const waitTime = Math.max(1200, delay * Math.pow(1.8, attempt) + Math.random() * 200);
+          await new Promise((r) => setTimeout(r, waitTime));
+          continue;
+        }
       }
       if (!res.ok) throw new Error(`Timing screen unreachable (${res.status})`);
       const data = await res.json();
@@ -16,7 +20,8 @@ async function get(url, retries = 3, delay = 400) {
       return data;
     } catch (err) {
       if (attempt === retries) throw err;
-      await new Promise((r) => setTimeout(r, delay * Math.pow(2, attempt)));
+      const waitTime = Math.max(1200, delay * Math.pow(1.8, attempt) + Math.random() * 200);
+      await new Promise((r) => setTimeout(r, waitTime));
     }
   }
 }
@@ -74,85 +79,83 @@ export async function getTeamHistory(teamId) {
 }
 
 export async function getDriverDetail(driverId) {
-  const [bioData, seasonsData, countData, winsData, p2Data, p3Data] = await Promise.all([
-    get(`${BASE}/drivers/${driverId}.json`),
-    get(`${BASE}/drivers/${driverId}/seasons.json?limit=100`),
-    get(`${BASE}/drivers/${driverId}/results.json?limit=1`),
-    get(`${BASE}/drivers/${driverId}/results/1.json?limit=1`).catch(() => ({ MRData: { total: '0' } })),
-    get(`${BASE}/drivers/${driverId}/results/2.json?limit=1`).catch(() => ({ MRData: { total: '0' } })),
-    get(`${BASE}/drivers/${driverId}/results/3.json?limit=1`).catch(() => ({ MRData: { total: '0' } })),
-  ]);
+  if (driverDetailCache.has(driverId)) {
+    return driverDetailCache.get(driverId);
+  }
 
-  const driver = bioData.MRData.DriverTable.Drivers[0];
-  const seasons = (seasonsData.MRData?.SeasonTable?.Seasons || []).map((s) => s.season);
-  const totalRaces = +countData.MRData.total || 0;
-  const totalWins = +winsData.MRData.total || 0;
-  const p2Count = +p2Data.MRData.total || 0;
-  const p3Count = +p3Data.MRData.total || 0;
-  const podiums = totalWins + p2Count + p3Count;
+  // Fetch page 1 of all race results (covers 100% of races for 90% of all F1 drivers)
+  const page1 = await get(`${BASE}/drivers/${driverId}/results.json?limit=100`);
+  const totalRaces = +page1.MRData?.total || 0;
+  let allRaces = page1.MRData?.RaceTable?.Races || [];
 
-  // Fetch recent races from the driver's latest active seasons (up to 2 recent seasons)
-  const targetRecentSeasons = seasons.slice(-2).reverse();
-  const recentSeasonResults = await Promise.all(
-    targetRecentSeasons.map(async (y) => {
-      try {
-        const d = await get(`${BASE}/${y}/drivers/${driverId}/results.json?limit=100`);
-        return d.MRData?.RaceTable?.Races || [];
-      } catch {
-        return [];
-      }
-    })
-  );
+  // If driver has more than 100 career races, fetch subsequent pages in sequence
+  if (totalRaces > 100) {
+    for (let o = 100; o < totalRaces; o += 100) {
+      const p = await get(`${BASE}/drivers/${driverId}/results.json?limit=100&offset=${o}`).catch(() => ({
+        MRData: { RaceTable: { Races: [] } },
+      }));
+      allRaces = allRaces.concat(p.MRData?.RaceTable?.Races || []);
+    }
+  }
 
-  const allRecentRaces = recentSeasonResults.flat();
-  allRecentRaces.sort((a, b) => {
+  // Extract driver bio from first available race result or fallback endpoint
+  let driver = allRaces[0]?.Results?.[0]?.Driver;
+  if (!driver) {
+    const bioData = await get(`${BASE}/drivers/${driverId}.json`).catch(() => ({}));
+    driver = bioData.MRData?.DriverTable?.Drivers?.[0] || {
+      driverId,
+      givenName: driverId.replace(/_/g, ' ').toUpperCase(),
+      familyName: '',
+    };
+  }
+
+  let totalWins = 0;
+  let podiums = 0;
+  let totalPoints = 0;
+  let bestPos = Infinity;
+
+  for (const r of allRaces) {
+    const res = r.Results?.[0];
+    if (!res) continue;
+    const pos = +res.position;
+    const pts = +res.points || 0;
+    totalPoints += pts;
+    if (pos === 1) totalWins++;
+    if (pos >= 1 && pos <= 3) podiums++;
+    if (pos > 0 && pos < bestPos) bestPos = pos;
+  }
+
+  const bestFinish = totalWins > 0 ? 'P1' : bestPos !== Infinity ? `P${bestPos}` : '—';
+
+  // Sort races chronologically descending for recent results
+  const sortedRaces = allRaces.slice().sort((a, b) => {
     if (a.season !== b.season) return +b.season - +a.season;
     return +b.round - +a.round;
   });
 
-  const recentResults = allRecentRaces.slice(0, 12).map((r) => ({
+  const recentResults = sortedRaces.slice(0, 12).map((r) => ({
     season: r.season,
     round: r.round,
     raceName: r.raceName,
     date: r.date,
-    position: r.Results[0]?.positionText || '—',
-    grid: r.Results[0]?.grid,
-    points: r.Results[0]?.points,
-    constructor: r.Results[0]?.Constructor?.name,
-    constructorId: r.Results[0]?.Constructor?.constructorId,
-    status: r.Results[0]?.status,
+    number: r.Results?.[0]?.number,
+    position: r.Results?.[0]?.positionText || '—',
+    grid: r.Results?.[0]?.grid,
+    points: r.Results?.[0]?.points,
+    constructor: r.Results?.[0]?.Constructor?.name,
+    constructorId: r.Results?.[0]?.Constructor?.constructorId,
+    status: r.Results?.[0]?.status,
   }));
 
-  // Fetch driver season standings in parallel to compute true career points and best finish
-  const standings = await Promise.all(
-    seasons.map(async (y) => {
-      try {
-        const d = await get(`${BASE}/${y}/drivers/${driverId}/driverStandings.json`);
-        const ds = d.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings?.[0];
-        return ds ? { points: +ds.points || 0, pos: +ds.position || Infinity } : null;
-      } catch {
-        return null;
-      }
-    })
-  );
+  const carNumber =
+    driver?.permanentNumber ||
+    sortedRaces[0]?.Results?.[0]?.number ||
+    driver?.code ||
+    '';
 
-  const validStandings = standings.filter(Boolean);
-  const totalPoints = validStandings.reduce((sum, s) => sum + s.points, 0);
-  const bestChampPos = validStandings.reduce((min, s) => Math.min(min, s.pos), Infinity);
-
-  let bestFinish = '—';
-  if (totalWins > 0) {
-    bestFinish = 'P1';
-  } else if (p2Count > 0) {
-    bestFinish = 'P2';
-  } else if (p3Count > 0) {
-    bestFinish = 'P3';
-  } else if (bestChampPos !== Infinity) {
-    bestFinish = `P${bestChampPos}`;
-  }
-
-  return {
+  const detail = {
     driver,
+    carNumber,
     totalRaces,
     totalWins,
     podiums,
@@ -160,6 +163,9 @@ export async function getDriverDetail(driverId) {
     bestFinish,
     recentResults,
   };
+
+  driverDetailCache.set(driverId, detail);
+  return detail;
 }
 
 export async function getSchedule(season = 'current') {

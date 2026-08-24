@@ -3,6 +3,7 @@ import Grid from './components/Grid.jsx';
 import Drivers from './components/Drivers.jsx';
 import Calendar from './components/Calendar.jsx';
 import Tracks from './components/Tracks.jsx';
+import CompareView from './components/CompareView.jsx';
 import TeamDetail from './components/TeamDetail.jsx';
 import DriverDetail from './components/DriverDetail.jsx';
 import CircuitDetail from './components/CircuitDetail.jsx';
@@ -50,6 +51,12 @@ export default function App() {
       setRoute({ view: 'driver', id: parts[1] });
     } else if (path === 'circuit' && parts[1]) {
       setRoute({ view: 'circuit', id: parts[1] });
+    } else if (path === 'compare' || path === 'vs') {
+      setRoute({
+        view: 'compare',
+        d1: parts[1] || 'max_verstappen',
+        d2: parts[2] || (parts[1] === 'norris' ? 'max_verstappen' : 'norris'),
+      });
     } else if (path === 'drivers') {
       setRoute({ view: 'drivers', id: null });
     } else if (path === 'schedule' || path === 'calendar') {
@@ -86,6 +93,11 @@ export default function App() {
   const handleOpenCircuit = (circuit) => {
     const cid = typeof circuit === 'string' ? circuit : circuit.circuitId;
     navigate(`circuit/${cid}`);
+  };
+
+  const handleOpenCompare = (d1Id) => {
+    const defaultRival = d1Id === 'norris' ? 'max_verstappen' : 'norris';
+    navigate(`compare/${d1Id}/${defaultRival}`);
   };
 
   const handleBack = (fallback) => {
@@ -153,6 +165,12 @@ export default function App() {
           >
             Tracks
           </button>
+          <button
+            className={`tab ${route.view === 'compare' ? 'active' : ''}`}
+            onClick={() => navigate('compare')}
+          >
+            Compare
+          </button>
         </nav>
       </header>
 
@@ -188,6 +206,7 @@ export default function App() {
               driverId={route.id}
               onBack={() => handleBack('drivers')}
               onOpenTeam={handleOpenTeam}
+              onOpenCompare={handleOpenCompare}
             />
           )}
 
@@ -195,6 +214,15 @@ export default function App() {
             <CircuitDetail
               circuit={activeCircuit}
               onBack={() => handleBack('tracks')}
+              onOpenDriver={handleOpenDriver}
+              onOpenTeam={handleOpenTeam}
+            />
+          )}
+
+          {route.view === 'compare' && (
+            <CompareView
+              d1={route.d1}
+              d2={route.d2}
               onOpenDriver={handleOpenDriver}
               onOpenTeam={handleOpenTeam}
             />

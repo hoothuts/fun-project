@@ -14,7 +14,7 @@ const ageOf = (dob) => {
   return now.getFullYear() - d.getFullYear() - (now < new Date(now.getFullYear(), d.getMonth(), d.getDate()) ? 1 : 0);
 };
 
-export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
+export default function DriverDetail({ driverId, onBack, onOpenTeam, onOpenCompare }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -42,12 +42,14 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
   const latestConstructor = data?.recentResults?.[0]?.constructorId;
   const accent = teamColor(latestConstructor);
   const driverFullName = driver ? `${driver.givenName} ${driver.familyName}` : 'DRIVER';
+  const rawNum = data?.carNumber || driver?.permanentNumber || data?.recentResults?.[0]?.number;
+  const numDisplay = rawNum && /^\d+$/.test(rawNum) ? `#${rawNum}` : driver?.code || '—';
 
   return (
     <section className="detail">
       <IdentityBackdrop
         type="driver"
-        number={driver?.permanentNumber}
+        number={rawNum && /^\d+$/.test(rawNum) ? rawNum : ''}
         code={driver?.code}
         accentColor={accent}
       />
@@ -59,7 +61,7 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
       <header className="detail-header">
         <p className="eyebrow" style={{ color: accent }}>
           {driver
-            ? `#${driver.permanentNumber || driver.code || '—'} · ${driver.nationality}`
+            ? `${numDisplay} · ${driver.nationality}`
             : 'LOADING DRIVER PROFILE…'}
         </p>
         <BootTitle style={{ color: accent }}>
@@ -132,6 +134,18 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
           );
         })}
       </div>
+
+      {onOpenCompare && (
+        <div className="driver-footer-cta">
+          <button
+            type="button"
+            className="compare-driver-link-btn"
+            onClick={() => onOpenCompare(driverId)}
+          >
+            ⚔️ COMPARE {driver?.familyName?.toUpperCase() || 'DRIVER'} IN HEAD-TO-HEAD ARENA →
+          </button>
+        </div>
+      )}
     </section>
   );
 }
