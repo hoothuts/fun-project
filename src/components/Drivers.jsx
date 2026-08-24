@@ -6,6 +6,7 @@ import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import EraSeasonSelector from './EraSeasonSelector.jsx';
 import TiltCard from './TiltCard.jsx';
+import SeasonProgress from './SeasonProgress.jsx';
 
 export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'current' }) {
   const [season, setSeason] = useState(initialSeason);
@@ -53,6 +54,7 @@ export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'cur
         </div>
         <BootTitle>DRIVERS</BootTitle>
         <p className="hero-sub">World Championship Standings. Tap a driver for career stats.</p>
+        <SeasonProgress season={season} />
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}

@@ -66,7 +66,7 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam, onOpenCompa
             ? `${numDisplay} · ${driver.nationality}`
             : 'LOADING DRIVER PROFILE…'}
         </p>
-        <BootTitle style={{ color: accent }}>
+        <BootTitle style={{ color: accent }} firstName={driver?.givenName} lastName={driver?.familyName}>
           {driverFullName}
         </BootTitle>
         <p className="detail-meta">

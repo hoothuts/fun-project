@@ -6,6 +6,7 @@ import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
 import EraSeasonSelector from './EraSeasonSelector.jsx';
 import RaceResultsDrawer from './RaceResultsDrawer.jsx';
+import SeasonProgress from './SeasonProgress.jsx';
 
 const formatDate = (dStr) => {
   if (!dStr) return '—';
@@ -62,6 +63,7 @@ export default function Calendar({ onOpenRace, onOpenCircuit, onOpenDriver, onOp
         </div>
         <BootTitle>SCHEDULE</BootTitle>
         <p className="hero-sub">Grand Prix dates, circuits, and race winners. Click a race name to view full classification.</p>
+        <SeasonProgress season={season} races={schedule} />
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}

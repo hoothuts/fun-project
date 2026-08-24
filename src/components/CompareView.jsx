@@ -238,7 +238,12 @@ export default function CompareView({
               })()}
             </span>
             <h2 className="arena-driver-name">
-              {loading1 ? 'LOADING…' : dr1 ? `${dr1.givenName} ${dr1.familyName}` : 'SELECT DRIVER 1'}
+              {loading1 ? 'LOADING…' : dr1 ? (
+                <>
+                  <span className="name-first">{dr1.givenName} </span>
+                  <span className="name-last">{dr1.familyName}</span>
+                </>
+              ) : 'SELECT DRIVER 1'}
             </h2>
             <div className="arena-driver-sub-row">
               <span className="arena-driver-nat">{dr1?.nationality || 'Driver'}</span>
@@ -322,7 +327,12 @@ export default function CompareView({
               })()}
             </span>
             <h2 className="arena-driver-name">
-              {loading2 ? 'LOADING…' : dr2 ? `${dr2.givenName} ${dr2.familyName}` : 'SELECT DRIVER 2'}
+              {loading2 ? 'LOADING…' : dr2 ? (
+                <>
+                  <span className="name-first">{dr2.givenName} </span>
+                  <span className="name-last">{dr2.familyName}</span>
+                </>
+              ) : 'SELECT DRIVER 2'}
             </h2>
             <div className="arena-driver-sub-row">
               <span className="arena-driver-nat">{dr2?.nationality || 'Driver'}</span>
