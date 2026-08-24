@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { stagger } from 'animejs';
 import { getDriverDetail } from '../api.js';
+import { getDriverBio } from '../driverBios.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
@@ -14,7 +15,7 @@ const ageOf = (dob) => {
   return now.getFullYear() - d.getFullYear() - (now < new Date(now.getFullYear(), d.getMonth(), d.getDate()) ? 1 : 0);
 };
 
-export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
+export default function DriverDetail({ driverId, onBack, onOpenTeam, onOpenCompare }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -42,12 +43,15 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
   const latestConstructor = data?.recentResults?.[0]?.constructorId;
   const accent = teamColor(latestConstructor);
   const driverFullName = driver ? `${driver.givenName} ${driver.familyName}` : 'DRIVER';
+  const rawNum = data?.carNumber || driver?.permanentNumber || data?.recentResults?.[0]?.number;
+  const numDisplay = rawNum && /^\d+$/.test(rawNum) ? `#${rawNum}` : driver?.code || '—';
+  const bio = getDriverBio(driverId, data);
 
   return (
     <section className="detail">
       <IdentityBackdrop
         type="driver"
-        number={driver?.permanentNumber}
+        number={rawNum && /^\d+$/.test(rawNum) ? rawNum : ''}
         code={driver?.code}
         accentColor={accent}
       />
@@ -59,7 +63,7 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
       <header className="detail-header">
         <p className="eyebrow" style={{ color: accent }}>
           {driver
-            ? `#${driver.permanentNumber || driver.code || '—'} · ${driver.nationality}`
+            ? `${numDisplay} · ${driver.nationality}`
             : 'LOADING DRIVER PROFILE…'}
         </p>
         <BootTitle style={{ color: accent }}>
@@ -90,6 +94,63 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}
+
+      {/* Driver Dossier & Heritage Lore Card */}
+      {data && (
+        <div className="driver-dossier-card" style={{ '--accent': accent }}>
+          <div className="dossier-topbar">
+            <div className="dossier-tag-group">
+              <span className="dossier-badge">DRIVER DOSSIER</span>
+              <span className="dossier-label">CAREER HERITAGE & TELEMETRY</span>
+            </div>
+            {bio.nickname && (
+              <span className="dossier-nickname">"{bio.nickname}"</span>
+            )}
+          </div>
+
+          <div className="dossier-grid">
+            <div className="dossier-info-col">
+              {bio.titles > 0 && (
+                <div className="dossier-row">
+                  <span className="dossier-k">WORLD TITLES</span>
+                  <span className="dossier-v is-gold">
+                    👑 {bio.titles}x WORLD CHAMPION {bio.titleYears ? `(${bio.titleYears})` : ''}
+                  </span>
+                </div>
+              )}
+
+              <div className="dossier-row">
+                <span className="dossier-k">CAREER ERA</span>
+                <span className="dossier-v">{bio.careerSpan || 'Formula 1'}</span>
+              </div>
+
+              {bio.teams && bio.teams.length > 0 && (
+                <div className="dossier-row">
+                  <span className="dossier-k">CONSTRUCTORS</span>
+                  <div className="dossier-teams-wrap">
+                    {bio.teams.map((t, idx) => (
+                      <span key={idx} className="dossier-team-pill">
+                        {t}
+                        {idx < bio.teams.length - 1 && <span className="dossier-arrow">→</span>}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="dossier-lore-col">
+              <p className="dossier-lore">{bio.lore}</p>
+              {bio.trivia && (
+                <div className="dossier-trivia-box">
+                  <span className="trivia-icon">💡</span>
+                  <p className="dossier-trivia">{bio.trivia}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <h2 className="section-title">RECENT GRAND PRIX RESULTS</h2>
       {data?.recentResults?.length === 0 && <p className="error">No race results recorded.</p>}
@@ -132,6 +193,18 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam }) {
           );
         })}
       </div>
+
+      {onOpenCompare && (
+        <div className="driver-footer-cta">
+          <button
+            type="button"
+            className="compare-driver-link-btn"
+            onClick={() => onOpenCompare(driverId)}
+          >
+            ⚔️ COMPARE {driver?.familyName?.toUpperCase() || 'DRIVER'} IN HEAD-TO-HEAD ARENA →
+          </button>
+        </div>
+      )}
     </section>
   );
 }

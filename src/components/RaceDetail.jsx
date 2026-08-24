@@ -4,6 +4,7 @@ import { getRaceResults } from '../api.js';
 import { teamColor } from '../teamColors.js';
 import useAnime from '../useAnime.js';
 import BootTitle from './BootTitle.jsx';
+import TrackTelemetryWidget from './TrackTelemetryWidget.jsx';
 
 const formatDate = (dStr) => {
   if (!dStr) return '—';
@@ -166,7 +167,7 @@ export default function RaceDetail({
             {fl && (
               <div className="podium-card podium-fl">
                 <div className="podium-card-top">
-                  <span className="fl-purple-tag">FASTEST LAP · 1 PT</span>
+                  <span className="fl-purple-tag">FASTEST LAP</span>
                   <span className="podium-time">{fl.fastestLap?.time || '—'}</span>
                 </div>
                 <button className="podium-driver-name" onClick={() => fl.driverId && onOpenDriver(fl.driverId)}>
@@ -178,6 +179,15 @@ export default function RaceDetail({
               </div>
             )}
           </div>
+
+          {/* Track Weather & Pirelli Tire Telemetry */}
+          {data.circuit && (
+            <TrackTelemetryWidget
+              circuitId={data.circuit.circuitId}
+              lat={data.circuit.Location?.lat}
+              long={data.circuit.Location?.long}
+            />
+          )}
 
           {/* Full Classification Timing Board */}
           <h2 className="section-title">FULL RACE CLASSIFICATION</h2>

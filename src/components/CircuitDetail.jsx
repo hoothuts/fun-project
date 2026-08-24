@@ -7,6 +7,7 @@ import BootTitle from './BootTitle.jsx';
 import TrackCircuit from './TrackCircuit.jsx';
 import ScrambleNumber from './ScrambleNumber.jsx';
 import IdentityBackdrop from './IdentityBackdrop.jsx';
+import TrackTelemetryWidget from './TrackTelemetryWidget.jsx';
 
 const timeMs = (t) => {
   if (!t) return Infinity;
@@ -190,6 +191,12 @@ export default function CircuitDetail({ circuit, onBack, onOpenDriver, onOpenTea
           <TrackCircuit file={activeFile} />
         </div>
       </div>
+
+      <TrackTelemetryWidget
+        circuitId={circuit.circuitId}
+        lat={circuit.Location?.lat}
+        long={circuit.Location?.long}
+      />
 
       <h2 className="section-title">MOST WINS</h2>
       <div className="winners">

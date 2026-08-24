@@ -136,7 +136,7 @@ export default function RaceResultsDrawer({
           {fl && (
             <div className="podium-card podium-fl">
               <div className="podium-card-top">
-                <span className="fl-purple-tag">FASTEST LAP · 1 PT</span>
+                <span className="fl-purple-tag">FASTEST LAP</span>
                 <span className="podium-time">{fl.fastestLap?.time || '—'}</span>
               </div>
               <button className="podium-driver-name" onClick={() => fl.driverId && onOpenDriver(fl.driverId)}>
