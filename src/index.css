@@ -381,7 +381,8 @@ button {
 }
 
 .telemetry-pct-badge {
-  position: relative;
+  position: absolute;
+  top: 50%;
   z-index: 6;
   display: inline-flex;
   align-items: center;
@@ -394,6 +395,9 @@ button {
   font: 700 0.62rem/1 var(--font-mono);
   color: var(--ink);
   letter-spacing: 0.03em;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pct-bracket {

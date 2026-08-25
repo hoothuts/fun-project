@@ -79,7 +79,13 @@ export default function SeasonProgress({ season = 'current', races = null }) {
             })}
           </div>
 
-          <div className="telemetry-pct-badge">
+          <div
+            className="telemetry-pct-badge"
+            style={{
+              left: `${percentage}%`,
+              transform: `translate(-${percentage}%, -50%)`,
+            }}
+          >
             <span className="pct-bracket">[</span>
             <span className="pct-number">{percentage}%</span>
             <span className="pct-bracket">]</span>
