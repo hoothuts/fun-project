@@ -3822,6 +3822,711 @@ button.driver-card:hover .driver-card-go {
   }
 }
 
+/* ── 3D Wind Tunnel & Garage Showroom ─────────────────────── */
+
+.garage-page {
+  animation: fadeIn 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.garage-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.garage-title-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 540px;
+}
+
+.garage-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.garage-badge {
+  font: 700 0.6rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.garage-badge.fia-red {
+  background: rgba(225, 6, 0, 0.18);
+  border: 1px solid rgba(225, 6, 0, 0.45);
+  color: var(--red);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.25);
+}
+
+.garage-badge.tech-active {
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: #00e5ff;
+}
+
+.garage-title {
+  margin: 0;
+  font: 400 clamp(1.6rem, 4vw, 2.4rem)/1.05 var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.garage-subtitle {
+  margin: 0;
+  font: 400 0.8rem/1.5 var(--font-mono);
+  color: var(--muted);
+}
+
+.garage-specs-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.spec-capsule {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-width: 110px;
+}
+
+.spec-k {
+  font: 600 0.54rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.spec-v {
+  font: 700 0.88rem/1 var(--font-mono);
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.spec-v.highlight-red {
+  color: var(--red);
+}
+
+.spec-delta {
+  font-size: 0.62rem;
+  color: #00d26a;
+  font-weight: 500;
+}
+
+/* ── 3D Stage Container ─────────────────────────────────── */
+
+.garage-stage-container {
+  position: relative;
+  width: 100%;
+  height: clamp(480px, 68vh, 720px);
+  background: radial-gradient(circle at center, #151921 0%, #0c0e12 100%);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 80px rgba(0, 0, 0, 0.5);
+}
+
+.f1-viewer-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.f1-viewer-viewport:active {
+  cursor: grabbing;
+}
+
+.f1-viewer-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(12, 14, 18, 0.92);
+  backdrop-filter: blur(10px);
+  z-index: 50;
+}
+
+.f1-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(225, 6, 0, 0.2);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  box-shadow: 0 0 16px rgba(225, 6, 0, 0.4);
+}
+
+.f1-loading-txt {
+  font: 700 0.72rem/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--ink);
+}
+
+.f1-model-notice {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  background: rgba(21, 24, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font: 600 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ── 3D Hotspot Sensor Pins ─────────────────────────────── */
+
+.f1-hotspot-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.45rem;
+  background: rgba(13, 15, 18, 0.85);
+  border: 1px solid rgba(225, 6, 0, 0.6);
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 15;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 12px rgba(225, 6, 0, 0.3);
+}
+
+.f1-hotspot-pin:hover {
+  background: var(--red);
+  border-color: #ffffff;
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 0 20px rgba(225, 6, 0, 0.7);
+}
+
+.f1-hotspot-pin.is-active {
+  background: var(--red);
+  border-color: #ffffff;
+  box-shadow: 0 0 25px rgba(225, 6, 0, 0.85);
+}
+
+.hotspot-pulse {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(225, 6, 0, 0.5);
+  animation: pulse 1.6s infinite ease-out;
+  left: 7px;
+}
+
+.hotspot-core {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 6px #ffffff;
+  position: relative;
+  z-index: 2;
+}
+
+.hotspot-label {
+  font: 700 0.56rem/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* ── HUD Telemetry Overlay ──────────────────────────────── */
+
+.garage-hud-overlay {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.hud-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 1rem;
+  background: rgba(15, 18, 24, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hud-metric-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d26a;
+  box-shadow: 0 0 8px #00d26a;
+  animation: pulse 1.5s infinite;
+}
+
+.hud-title {
+  font: 700 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.hud-metric-val {
+  font: 700 0.82rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.val-z-mode {
+  color: #00e5ff;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.val-x-mode {
+  color: #ff9900;
+  text-shadow: 0 0 10px rgba(255, 153, 0, 0.4);
+}
+
+.hud-metric-sub {
+  font: 400 0.62rem/1.3 var(--font-mono);
+  color: var(--muted);
+}
+
+.garage-control-dock {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(14, 16, 22, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  backdrop-filter: blur(16px);
+  z-index: 25;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  max-width: 95%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.garage-control-dock::-webkit-scrollbar {
+  display: none;
+}
+
+.dock-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dock-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--line);
+  margin: 0 0.2rem;
+}
+
+.dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font: 600 0.65rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.dock-btn:hover {
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: #202632;
+}
+
+.dock-btn.is-active {
+  color: #ffffff;
+  background: rgba(225, 6, 0, 0.2);
+  border-color: var(--red);
+  box-shadow: 0 0 14px rgba(225, 6, 0, 0.3);
+}
+
+.mode-btn.z-mode {
+  background: rgba(0, 229, 255, 0.18);
+  border-color: #00e5ff;
+  color: #00e5ff;
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.3);
+}
+
+.mode-btn.x-mode {
+  background: rgba(255, 153, 0, 0.18);
+  border-color: #ff9900;
+  color: #ff9900;
+  box-shadow: 0 0 14px rgba(255, 153, 0, 0.3);
+}
+
+.camera-preset-btn {
+  padding: 0.4rem 0.55rem;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font: 600 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.camera-preset-btn:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.camera-preset-btn.is-active {
+  color: var(--red);
+  border-color: var(--red);
+  background: rgba(225, 6, 0, 0.12);
+}
+
+/* ── Technical Lore & Spec Drawer ───────────────────────── */
+
+.garage-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(380px, 92%);
+  background: rgba(14, 16, 22, 0.95);
+  border-left: 1px solid var(--line);
+  backdrop-filter: blur(20px);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+  animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.3rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.drawer-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.drawer-badge {
+  font: 700 0.6rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--red);
+  background: rgba(225, 6, 0, 0.15);
+  border: 1px solid rgba(225, 6, 0, 0.4);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.drawer-status {
+  font: 600 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  color: #00d26a;
+}
+
+.drawer-close-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: color 0.15s;
+}
+
+.drawer-close-btn:hover {
+  color: var(--ink);
+}
+
+.drawer-body {
+  padding: 1.3rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.drawer-title {
+  margin: 0;
+  font: 400 1.35rem/1.1 var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.drawer-subtitle {
+  font: 400 0.72rem/1.4 var(--font-mono);
+  color: var(--muted);
+  margin-top: -0.8rem;
+}
+
+.drawer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.65rem;
+}
+
+.drawer-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+
+.d-stat-k {
+  font: 600 0.52rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.d-stat-v {
+  font: 700 0.78rem/1 var(--font-mono);
+  color: var(--ink);
+}
+
+.drawer-lore-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: rgba(225, 6, 0, 0.06);
+  border: 1px solid rgba(225, 6, 0, 0.22);
+  border-radius: 6px;
+}
+
+.lore-title {
+  font: 700 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--red);
+}
+
+.lore-text {
+  margin: 0;
+  font: 400 0.74rem/1.6 'Formula1 Regular', sans-serif;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.drawer-hotspot-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.nav-lbl {
+  font: 600 0.55rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.hotspot-pill-btn {
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  font: 500 0.62rem/1 var(--font-mono);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hotspot-pill-btn:hover {
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.hotspot-pill-btn.is-active {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.drawer-footer {
+  padding: 1rem 1.3rem;
+  border-top: 1px solid var(--line);
+}
+
+.drawer-reset-cam-btn {
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: 5px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  font: 700 0.65rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.drawer-reset-cam-btn:hover {
+  background: #1e2430;
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ── Team Detail Aero Banner ────────────────────────────── */
+
+.team-aero-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 1.25rem 1.6rem;
+  background: linear-gradient(135deg, rgba(225, 6, 0, 0.08) 0%, var(--panel) 100%);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent, var(--red));
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.team-aero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 600px;
+}
+
+.team-aero-tag {
+  font: 700 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--accent, var(--red));
+}
+
+.team-aero-title {
+  margin: 0;
+  font: 400 1.2rem/1.1 var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.team-aero-desc {
+  margin: 0;
+  font: 400 0.75rem/1.5 var(--font-mono);
+  color: var(--muted);
+}
+
+.team-aero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px;
+  background: var(--panel-2);
+  border: 1px solid;
+  color: var(--ink);
+  font: 700 0.7rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 15px rgba(225, 6, 0, 0.15);
+}
+
+.team-aero-btn:hover {
+  background: rgba(225, 6, 0, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 25px rgba(225, 6, 0, 0.35);
+  transform: translateX(2px);
+}
+
+/* ── Mobile Responsive Adjustments ──────────────────────── */
+
+@media (max-width: 860px) {
+  .garage-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .garage-stage-container {
+    height: 520px;
+  }
+  .garage-control-dock {
+    width: 96%;
+    padding: 0.4rem 0.6rem;
+    gap: 0.4rem;
+  }
+  .team-aero-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -3834,4 +4539,5 @@ button.driver-card:hover .driver-card-go {
     display: none;
   }
 }
+
 

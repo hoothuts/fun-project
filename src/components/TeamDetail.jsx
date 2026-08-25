@@ -154,6 +154,21 @@ export default function TeamDetail({ team, onBack, onOpenDriver }) {
 
       {error && <p className="error">{error} — refresh to retry.</p>}
 
+      {/* 3D Aerodynamics & Wind Tunnel Telemetry Banner */}
+      <div className="team-aero-banner" style={{ '--accent': accent }}>
+        <div className="team-aero-info">
+          <div className="team-aero-tag">FIA 2026 ACTIVE AERODYNAMICS</div>
+          <h3 className="team-aero-title">WIND TUNNEL & CHASSIS TELEMETRY</h3>
+          <p className="team-aero-desc">
+            Inspect the 2026 regulation aerodynamics, active Z-Mode/X-Mode flap systems, and ground effect underbody in real-time 3D.
+          </p>
+        </div>
+        <a href="#garage" className="team-aero-btn" style={{ borderColor: accent }}>
+          <span className="btn-icon">💨</span>
+          <span>LAUNCH 3D WIND TUNNEL →</span>
+        </a>
+      </div>
+
       <h2 className="section-title">DRIVERS</h2>
       {drivers?.length === 0 && <p className="error">No active drivers listed for this season.</p>}
       <div className="drivers" ref={driversRef}>

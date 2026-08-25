@@ -8,6 +8,7 @@ import TeamDetail from './components/TeamDetail.jsx';
 import DriverDetail from './components/DriverDetail.jsx';
 import CircuitDetail from './components/CircuitDetail.jsx';
 import RaceDetail from './components/RaceDetail.jsx';
+import GarageShowroom from './components/GarageShowroom.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import SpeedlineCanvas from './components/SpeedlineCanvas.jsx';
 import { getCircuits } from './api.js';
@@ -63,6 +64,8 @@ export default function App() {
       setRoute({ view: 'schedule', id: null });
     } else if (path === 'tracks' || path === 'circuits') {
       setRoute({ view: 'tracks', id: null });
+    } else if (path === 'garage' || path === 'showroom' || path === '3d') {
+      setRoute({ view: 'garage', id: null });
     } else {
       setRoute({ view: 'teams', id: null });
     }
@@ -171,6 +174,12 @@ export default function App() {
           >
             Compare
           </button>
+          <button
+            className={`tab ${route.view === 'garage' ? 'active' : ''}`}
+            onClick={() => navigate('garage')}
+          >
+            Garage ✦
+          </button>
         </nav>
       </header>
 
@@ -226,6 +235,10 @@ export default function App() {
               onOpenDriver={handleOpenDriver}
               onOpenTeam={handleOpenTeam}
             />
+          )}
+
+          {route.view === 'garage' && (
+            <GarageShowroom />
           )}
 
           {route.view === 'teams' && (

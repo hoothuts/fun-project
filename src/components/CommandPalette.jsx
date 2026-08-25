@@ -27,6 +27,7 @@ const SEARCH_DATABASE = [
   { type: 'view', category: 'NAVIGATION', id: 'view-teams', title: 'The Grid (Constructors Championship)', subtitle: 'Current and historic constructor standings', hash: 'teams', badge: 'VIEW', priority: 20 },
   { type: 'view', category: 'NAVIGATION', id: 'view-drivers', title: 'World Drivers Championship', subtitle: 'Driver points, rankings and era standings', hash: 'drivers', badge: 'VIEW', priority: 20 },
   { type: 'view', category: 'NAVIGATION', id: 'view-schedule', title: 'Grand Prix Calendar', subtitle: 'Championship calendar, dates, and race winners', hash: 'schedule', badge: 'VIEW', priority: 20 },
+  { type: 'view', category: 'NAVIGATION', id: 'view-garage', title: '3D Wind Tunnel & Chassis Showroom (2026 Prototype)', subtitle: 'Interactive 3D WebGL aerodynamics, Z-Mode/X-Mode active aero, and sensor telemetry', hash: 'garage', badge: '3D LAB', priority: 25 },
   { type: 'view', category: 'NAVIGATION', id: 'view-tracks', title: 'All 78 Circuits Archive', subtitle: 'Interactive 3D telemetry for every F1 track', hash: 'tracks', badge: 'VIEW', priority: 20 },
   { type: 'view', category: 'NAVIGATION', id: 'view-compare', title: 'Head-to-Head Arena (Driver Comparison)', subtitle: 'Compare career stats and telemetry between any two F1 drivers', hash: 'compare', badge: 'VIEW', priority: 20 },
 
