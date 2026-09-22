@@ -51,3 +51,30 @@ Dark carbon timing-screen look. Tokens: `--carbon #0d0f12`, `--panel #15181e`, `
 - Per-target fn values may return `[from, to]` arrays (e.g. `width: (el,i) => [0, widths[i]]`)
 - anime does NOT set `transform-box` — SVG car shapes must be drawn around local (0,0) so `rotate` pivots correctly
 
+## Skills, commands and rules (read this first)
+
+Config lives in `kilo.json`. `.kilo/rules/*.md` and this file are injected into
+every session automatically. Slash commands live in `.kilo/workflows/`:
+`/slop` (antislop + UI + redesign skills), `/ponytail` (lite|full|ultra),
+`/gate` (Delivery Gate report). Skills load from `C:\Users\abima\.agents\skills`,
+registered in `kilo.json` under `skills.paths`.
+
+**Broken in this install:** any file under `.kilo/command/` or `.kilo/agent/`
+fails with `Failed to parse frontmatter: No context found for instance`, on any
+content including a file with no frontmatter at all. Use `.kilo/workflows/`
+instead. The primary-agent definition is parked at `%TEMP%\kilo\designer-agent.md`
+until that is fixed.
+
+## Locked — do not change
+
+`rotateX(45deg)` stage with `perspective: 1000px`, the 35s auto-rotation,
+dual-layer track stroke, `createDrawable` trace, `createMotionPath` capsule car,
+`TiltCard` tilt + shine, card grid layouts, hash router, `api.js` wrappers.
+Detail in `.kilo/rules/00-locked.md`.
+
+## Emoji to replace (9 total)
+
+crown -> the word, or a rank badge. trophy -> "WINNER". calendar -> "RACE DAY".
+flag -> "SEASON COMPLETE". bulb -> "NOTE". swords -> "VS". cross -> a plain X
+glyph. Do not add new emoji to UI text.
+

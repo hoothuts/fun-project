@@ -63,3 +63,9 @@ chat-log-*.md
 *.tmp
 *.temp
 scratch/
+
+# Kilo agent config and rules (local only)
+/AGENTS.md
+kilo.json
+.kilo/rules/
+.kilo/workflows/
