@@ -15,3 +15,5 @@ Untagged / image-only maps: Monsanto, Pedralbes, Charade, Reims-Gueux (PNG); Bre
 ### Attribution
 
 Circuit maps are from **Wikimedia Commons**, licensed under CC BY-SA (various versions), by their respective authors. Files retain their original Wikimedia titles; see each file's Commons page for credits. Tagging pass: `scripts/tag-tracks.ps1`, `scripts/analyze-tracks.ps1` (internal tooling).
+
+Also this is the link if you wanna see https://grid-archive.vercel.app/
