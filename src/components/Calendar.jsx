@@ -67,7 +67,22 @@ export default function Calendar({ onOpenRace, onOpenCircuit, onOpenDriver, onOp
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}
-      {loading && !schedule && <p className="loading-state">Loading championship calendar…</p>}
+      {loading && !schedule && (
+        <div className="cal-list cal-skeleton" aria-busy="true" aria-label="Loading race calendar">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div className="cal-card skeleton-card" key={i} style={{ padding: '0.85rem 1.1rem' }}>
+              <div className="cal-card-summary" style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+                <span className="skeleton-box" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '6px' }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <span className="skeleton-box" style={{ width: '45%', height: '1.1rem' }} />
+                  <span className="skeleton-box" style={{ width: '30%', height: '0.75rem' }} />
+                </div>
+                <span className="skeleton-box" style={{ width: '5.5rem', height: '1.5rem', borderRadius: '4px' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="cal-list" ref={listRef}>
         {schedule?.map((r) => {

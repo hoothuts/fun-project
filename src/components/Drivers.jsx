@@ -58,7 +58,27 @@ export default function Drivers({ onOpenDriver, onOpenTeam, initialSeason = 'cur
       </header>
 
       {error && <p className="error">{error} — refresh to retry.</p>}
-      {loading && !data && <p className="loading-state">Fetching driver standings…</p>}
+      {loading && !data && (
+        <div className="grid driver-grid grid-skeleton" aria-busy="true" aria-label="Loading driver standings">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div className="driver-standings-card skeleton-card" key={i}>
+              <div className="card-top" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span className="card-pos skeleton-box" style={{ width: '2rem', height: '1.4rem' }} />
+                <span className="skeleton-box" style={{ width: '2rem', height: '1.4rem' }} />
+              </div>
+              <div className="card-driver-body" style={{ marginTop: '0.6rem' }}>
+                <span className="skeleton-box" style={{ width: '50%', height: '0.8rem', display: 'block' }} />
+                <span className="skeleton-box" style={{ width: '75%', height: '1.3rem', marginTop: '0.4rem', display: 'block' }} />
+                <span className="skeleton-box" style={{ width: '60%', height: '1rem', marginTop: '0.6rem', display: 'block' }} />
+              </div>
+              <div className="card-meta" style={{ marginTop: '0.8rem', display: 'flex', gap: '0.8rem' }}>
+                <span className="skeleton-box" style={{ width: '4rem', height: '0.9rem' }} />
+                <span className="skeleton-box" style={{ width: '3.5rem', height: '0.9rem' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="grid driver-grid" ref={listRef}>
         {data?.standings.map((d, i) => {

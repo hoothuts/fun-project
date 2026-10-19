@@ -188,8 +188,9 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }) {
                 setQuery('');
                 inputRef.current?.focus();
               }}
+              aria-label="Clear search"
             >
-              ✕
+              ×
             </button>
           )}
           <span className="cmd-kbd-badge">ESC</span>

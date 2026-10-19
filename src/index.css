@@ -264,6 +264,24 @@ button {
   border-bottom-color: var(--red);
 }
 
+@media (max-width: 580px) {
+  .tabs {
+    gap: 0.85rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.15rem;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tab {
+    letter-spacing: 0.12em;
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+}
+
 /* ── Shared hero ────────────────────────────────────────── */
 
 .hero {
@@ -442,10 +460,36 @@ button {
 .tooltip-winner {
   color: var(--gold);
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
 }
 
 .tooltip-upcoming {
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+}
+
+.telemetry-badge-p1 {
+  display: inline-block;
+  font: 800 0.52rem/1 var(--font-mono);
+  background: var(--gold);
+  color: #0d0f12;
+  padding: 0.12rem 0.3rem;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+  margin-right: 0.35rem;
+}
+
+.telemetry-badge-date {
+  display: inline-block;
+  font: 700 0.52rem/1 var(--font-mono);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--ink);
+  padding: 0.12rem 0.3rem;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+  margin-right: 0.35rem;
 }
 
 .telemetry-right {
@@ -1775,6 +1819,43 @@ button.driver-card:hover .driver-card-go {
   background: rgba(225, 6, 0, 0.06);
   border: 1px solid rgba(225, 6, 0, 0.22);
   border-radius: 6px;
+}
+
+.broadcast-title-badge {
+  display: inline-block;
+  font: 800 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: #0d0f12;
+  background: var(--gold);
+  padding: 0.18rem 0.42rem;
+  border-radius: 3px;
+  margin-right: 0.45rem;
+  vertical-align: middle;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.dossier-note-badge {
+  display: inline-block;
+  font: 800 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--red);
+  background: rgba(225, 6, 0, 0.16);
+  border: 1px solid rgba(225, 6, 0, 0.35);
+  padding: 0.22rem 0.45rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 0.12rem;
+}
+
+.compare-btn-glyph {
+  display: inline-block;
+  font: 800 0.65rem/1 var(--font-mono);
+  background: var(--red);
+  color: var(--white);
+  padding: 0.15rem 0.35rem;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  margin-right: 0.45rem;
 }
 
 .trivia-icon {
@@ -3302,7 +3383,16 @@ button.driver-card:hover .driver-card-go {
 }
 
 .arena-crown {
-  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.12rem 0.32rem;
+  border-radius: 3px;
+  background: var(--gold);
+  color: #0d0f12;
+  font: 800 0.58rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
 }
 
 .arena-stat-center {
@@ -3816,6 +3906,68 @@ button.driver-card:hover .driver-card-go {
   .telemetry-widget-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ── Telemetry Carbon Shimmer Skeletons ─────────────────── */
+
+@keyframes carbonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-box {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: carbonShimmer 1.8s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+.skeleton-card {
+  pointer-events: none;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  opacity: 0.75;
+}
+
+.grid-skeleton,
+.cal-skeleton {
+  pointer-events: none;
+}
+
+/* ── Swiss Timing & Telemetry Tabular Numerics ──────────── */
+
+.card-pos,
+.driver-badge-num,
+.card-meta,
+.card-points,
+.card-wins,
+.arena-val,
+.telemetry-round-val,
+.pct-number,
+.dossier-v,
+.hist-pts,
+.cal-round-badge,
+.lap-time,
+.fastest-lap-badge,
+.telemetry-val {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TiltCard Accent Sheen ──────────────────────────────── */
+
+.team-card-tilt:hover .team-card,
+.driver-card-tilt:hover .driver-standings-card {
+  border-color: color-mix(in srgb, var(--accent, var(--red)) 55%, var(--line));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 24px color-mix(in srgb, var(--accent, var(--red)) 18%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -118,6 +118,8 @@ export default function App() {
         }
       : null;
 
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
   return (
     <div className="app">
       <SpeedlineCanvas />
@@ -132,11 +134,11 @@ export default function App() {
             type="button"
             className="cmd-trigger-btn"
             onClick={() => setIsCmdOpen(true)}
-            title="Search tracks, drivers, teams (⌘K)"
+            title={`Search tracks, drivers, teams (${isMac ? '⌘K' : 'Ctrl+K'})`}
           >
             <span className="cmd-trigger-icon">⌕</span>
             <span className="cmd-trigger-text">Search F1 Archive…</span>
-            <span className="cmd-trigger-kbd">⌘K</span>
+            <span className="cmd-trigger-kbd">{isMac ? '⌘K' : 'Ctrl+K'}</span>
           </button>
         </div>
 

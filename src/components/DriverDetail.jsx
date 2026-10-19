@@ -114,7 +114,7 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam, onOpenCompa
                 <div className="dossier-row">
                   <span className="dossier-k">WORLD TITLES</span>
                   <span className="dossier-v is-gold">
-                    👑 {bio.titles}x WORLD CHAMPION {bio.titleYears ? `(${bio.titleYears})` : ''}
+                    <span className="broadcast-title-badge">CHAMPION</span> {bio.titles}x WORLD CHAMPION {bio.titleYears ? `(${bio.titleYears})` : ''}
                   </span>
                 </div>
               )}
@@ -143,7 +143,7 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam, onOpenCompa
               <p className="dossier-lore">{bio.lore}</p>
               {bio.trivia && (
                 <div className="dossier-trivia-box">
-                  <span className="trivia-icon">💡</span>
+                  <span className="dossier-note-badge">NOTE</span>
                   <p className="dossier-trivia">{bio.trivia}</p>
                 </div>
               )}
@@ -201,7 +201,7 @@ export default function DriverDetail({ driverId, onBack, onOpenTeam, onOpenCompa
             className="compare-driver-link-btn"
             onClick={() => onOpenCompare(driverId)}
           >
-            ⚔️ COMPARE {driver?.familyName?.toUpperCase() || 'DRIVER'} IN HEAD-TO-HEAD ARENA →
+            <span className="compare-btn-glyph">VS</span> COMPARE {driver?.familyName?.toUpperCase() || 'DRIVER'} IN HEAD-TO-HEAD ARENA →
           </button>
         </div>
       )}

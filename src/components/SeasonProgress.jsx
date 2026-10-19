@@ -91,9 +91,13 @@ export default function SeasonProgress({ season = 'current', races = null }) {
             <span className="tooltip-round">RND {hoveredRound.round}</span>
             <span className="tooltip-name">{hoveredRound.raceName}</span>
             {hoveredRound.winner ? (
-              <span className="tooltip-winner">🏆 {hoveredRound.winner.driver}</span>
+              <span className="tooltip-winner">
+                <span className="telemetry-badge-p1">WINNER</span> {hoveredRound.winner.driver}
+              </span>
             ) : (
-              <span className="tooltip-upcoming">📅 {hoveredRound.date}</span>
+              <span className="tooltip-upcoming">
+                <span className="telemetry-badge-date">RACE DAY</span> {hoveredRound.date}
+              </span>
             )}
           </div>
         )}
@@ -110,7 +114,7 @@ export default function SeasonProgress({ season = 'current', races = null }) {
           </div>
         ) : (
           <div className="telemetry-concluded-block">
-            <span className="telemetry-concluded-tag">🏁 SEASON COMPLETE</span>
+            <span className="telemetry-concluded-tag">SEASON COMPLETE</span>
           </div>
         )}
       </div>

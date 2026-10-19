@@ -378,7 +378,7 @@ export default function CompareView({
           return (
             <div key={idx} className="arena-stat-row">
               <div className={`arena-val arena-val-left ${isD1Ahead ? 'is-winner' : ''}`}>
-                {isD1Ahead && <span className="arena-crown">👑</span>}
+                {isD1Ahead && <span className="arena-crown">P1</span>}
                 <span>{formatVal(s.v1)}</span>
               </div>
 
@@ -410,7 +410,7 @@ export default function CompareView({
 
               <div className={`arena-val arena-val-right ${isD2Ahead ? 'is-winner' : ''}`}>
                 <span>{formatVal(s.v2)}</span>
-                {isD2Ahead && <span className="arena-crown">👑</span>}
+                {isD2Ahead && <span className="arena-crown">P1</span>}
               </div>
             </div>
           );

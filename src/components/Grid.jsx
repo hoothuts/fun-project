@@ -96,6 +96,22 @@ export default function Grid({ onOpenTeam, initialSeason = 'current' }) {
 
       {error && <p className="error">{error} — refresh to retry.</p>}
 
+      {!data && !error && (
+        <div className="grid grid-skeleton" aria-busy="true" aria-label="Loading teams grid">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div className="team-card skeleton-card" key={i}>
+              <span className="card-pos skeleton-box" style={{ width: '2rem', height: '1.6rem' }} />
+              <span className="card-name skeleton-box" style={{ width: '68%', height: '1.2rem', marginTop: '0.4rem' }} />
+              <div className="card-meta" style={{ marginTop: '0.8rem', display: 'flex', gap: '0.8rem' }}>
+                <span className="skeleton-box" style={{ width: '4.2rem', height: '0.9rem' }} />
+                <span className="skeleton-box" style={{ width: '3.8rem', height: '0.9rem' }} />
+              </div>
+              <span className="skeleton-box" style={{ width: '4rem', height: '0.75rem', marginTop: '0.6rem' }} />
+            </div>
+          ))}
+        </div>
+      )}
+
       {data && !lightsOut && <StartingLights onOut={() => setLightsOut(true)} />}
 
       <div className="grid" ref={gridRef}>
